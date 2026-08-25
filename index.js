@@ -5,6 +5,7 @@ const API_URL = "http://localhost:5000";
 ========================= */
 
 let products = [];
+
 let businesses = [
   {
     id: 1,
@@ -25,38 +26,57 @@ let cart = [];
    NAVIGATION
 ========================= */
 
-const navLinks = document.querySelectorAll(".nav-link");
+const navLinks =
+  document.querySelectorAll(".nav-link");
 
 navLinks.forEach(link => {
+
   link.addEventListener("click", () => {
+
     showSection(link.dataset.section);
+
   });
+
 });
 
 
 function showSection(sectionId) {
 
-  document.querySelectorAll(".page").forEach(page => {
-    page.classList.remove("active-page");
-  });
+  document
+    .querySelectorAll(".page")
+    .forEach(page => {
 
-  const section = document.getElementById(sectionId);
+      page.classList.remove("active-page");
+
+    });
+
+
+  const section =
+    document.getElementById(sectionId);
+
 
   if (section) {
+
     section.classList.add("active-page");
+
   }
 
+
   navLinks.forEach(link => {
+
     link.classList.toggle(
       "active",
       link.dataset.section === sectionId
     );
+
   });
+
 
   window.scrollTo({
     top: 0,
     behavior: "smooth"
   });
+
 }
 
 
@@ -65,7 +85,10 @@ function showSection(sectionId) {
 ========================= */
 
 function formatPrice(price) {
-  return "₦" + Number(price).toLocaleString();
+
+  return "₦" +
+    Number(price).toLocaleString();
+
 }
 
 
@@ -77,35 +100,56 @@ async function loadProducts() {
 
   try {
 
-    const response = await fetch(
-      `${API_URL}/products`
-    );
+    const response =
+      await fetch(`${API_URL}/products`);
+
 
     if (!response.ok) {
-      throw new Error("Could not load products");
+
+      throw new Error(
+        "Could not load products"
+      );
+
     }
 
-    products = await response.json();
+
+    products =
+      await response.json();
+
 
     renderProducts();
+
     renderFeatured();
+
 
   } catch (error) {
 
     console.error(error);
 
+
     const productsContainer =
-      document.getElementById("productsContainer");
+      document.getElementById(
+        "productsContainer"
+      );
+
 
     if (productsContainer) {
+
       productsContainer.innerHTML = `
+
         <p class="error-message">
-          Could not connect to Heisjuly Marketplace server.
+
+          Could not connect to
+          Heisjuly Marketplace server.
+
         </p>
+
       `;
+
     }
 
   }
+
 }
 
 
@@ -116,20 +160,33 @@ async function loadProducts() {
 function renderProducts() {
 
   const container =
-    document.getElementById("productsContainer");
+    document.getElementById(
+      "productsContainer"
+    );
+
 
   if (!container) return;
 
+
   const searchInput =
-    document.getElementById("searchInput");
+    document.getElementById(
+      "searchInput"
+    );
+
 
   const search =
     searchInput
-      ? searchInput.value.toLowerCase().trim()
+      ? searchInput.value
+          .toLowerCase()
+          .trim()
       : "";
 
+
   const categoryFilter =
-    document.getElementById("categoryFilter");
+    document.getElementById(
+      "categoryFilter"
+    );
+
 
   const category =
     categoryFilter
@@ -141,20 +198,32 @@ function renderProducts() {
     products.filter(product => {
 
       const productName =
-        String(product.name || "").toLowerCase();
+        String(
+          product.name || ""
+        ).toLowerCase();
+
 
       const productDescription =
-        String(product.description || "").toLowerCase();
+        String(
+          product.description || ""
+        ).toLowerCase();
+
 
       const matchesSearch =
         productName.includes(search) ||
         productDescription.includes(search);
 
+
       const matchesCategory =
         category === "all" ||
         product.category === category;
 
-      return matchesSearch && matchesCategory;
+
+      return (
+        matchesSearch &&
+        matchesCategory
+      );
+
     });
 
 
@@ -164,13 +233,21 @@ function renderProducts() {
   if (filteredProducts.length === 0) {
 
     container.innerHTML = `
+
       <div class="empty-message">
+
         <h3>No products found</h3>
-        <p>Try another search or category.</p>
+
+        <p>
+          Try another search or category.
+        </p>
+
       </div>
+
     `;
 
     return;
+
   }
 
 
@@ -179,15 +256,21 @@ function renderProducts() {
     const card =
       document.createElement("div");
 
-    card.className = "product-card";
+
+    card.className =
+      "product-card";
 
 
     card.innerHTML = `
 
       <img
-        src="${product.image || "https://via.placeholder.com/500"}"
+        src="${
+          product.image ||
+          "https://via.placeholder.com/500"
+        }"
         alt="${escapeHTML(product.name)}"
       >
+
 
       <div class="product-info">
 
@@ -195,32 +278,55 @@ function renderProducts() {
           ${escapeHTML(product.name)}
         </h3>
 
+
         <span class="product-category">
-          ${escapeHTML(product.category)}
+
+          ${escapeHTML(
+            product.category
+          )}
+
         </span>
 
+
         <div class="product-price">
-          ${formatPrice(product.price)}
+
+          ${formatPrice(
+            product.price
+          )}
+
         </div>
 
+
         <p>
-          ${escapeHTML(product.description)}
+
+          ${escapeHTML(
+            product.description
+          )}
+
         </p>
+
 
         <button
           class="buy-btn"
-          onclick="addToCart('${product._id || product.id}')"
+          onclick="addToCart('${
+            product._id ||
+            product.id
+          }')"
         >
+
           Add to Cart
+
         </button>
 
       </div>
 
     `;
 
+
     container.appendChild(card);
 
   });
+
 }
 
 
@@ -231,56 +337,90 @@ function renderProducts() {
 function renderFeatured() {
 
   const container =
-    document.getElementById("featuredProducts");
+    document.getElementById(
+      "featuredProducts"
+    );
+
 
   if (!container) return;
+
 
   container.innerHTML = "";
 
 
-  products.slice(0, 4).forEach(product => {
+  products
+    .slice(0, 4)
+    .forEach(product => {
 
-    const card =
-      document.createElement("div");
-
-    card.className = "product-card";
+      const card =
+        document.createElement("div");
 
 
-    card.innerHTML = `
+      card.className =
+        "product-card";
 
-      <img
-        src="${product.image || "https://via.placeholder.com/500"}"
-        alt="${escapeHTML(product.name)}"
-      >
 
-      <div class="product-info">
+      card.innerHTML = `
 
-        <h3>
-          ${escapeHTML(product.name)}
-        </h3>
+        <img
+          src="${
+            product.image ||
+            "https://via.placeholder.com/500"
+          }"
+          alt="${escapeHTML(
+            product.name
+          )}"
+        >
 
-        <span class="product-category">
-          ${escapeHTML(product.category)}
-        </span>
 
-        <div class="product-price">
-          ${formatPrice(product.price)}
+        <div class="product-info">
+
+          <h3>
+            ${escapeHTML(
+              product.name
+            )}
+          </h3>
+
+
+          <span class="product-category">
+
+            ${escapeHTML(
+              product.category
+            )}
+
+          </span>
+
+
+          <div class="product-price">
+
+            ${formatPrice(
+              product.price
+            )}
+
+          </div>
+
+
+          <button
+            class="buy-btn"
+            onclick="addToCart('${
+              product._id ||
+              product.id
+            }')"
+          >
+
+            Add to Cart
+
+          </button>
+
         </div>
 
-        <button
-          class="buy-btn"
-          onclick="addToCart('${product._id || product.id}')"
-        >
-          Add to Cart
-        </button>
+      `;
 
-      </div>
 
-    `;
+      container.appendChild(card);
 
-    container.appendChild(card);
+    });
 
-  });
 }
 
 
@@ -289,7 +429,10 @@ function renderFeatured() {
 ========================= */
 
 const searchInput =
-  document.getElementById("searchInput");
+  document.getElementById(
+    "searchInput"
+  );
+
 
 if (searchInput) {
 
@@ -306,7 +449,10 @@ if (searchInput) {
 ========================= */
 
 const categoryFilter =
-  document.getElementById("categoryFilter");
+  document.getElementById(
+    "categoryFilter"
+  );
+
 
 if (categoryFilter) {
 
@@ -326,13 +472,17 @@ function filterCategory(category) {
 
   showSection("products");
 
+
   if (categoryFilter) {
 
-    categoryFilter.value = category;
+    categoryFilter.value =
+      category;
 
   }
 
+
   renderProducts();
+
 }
 
 
@@ -341,7 +491,9 @@ function filterCategory(category) {
 ========================= */
 
 const sellForm =
-  document.getElementById("sellForm");
+  document.getElementById(
+    "sellForm"
+  );
 
 
 if (sellForm) {
@@ -356,33 +508,52 @@ if (sellForm) {
       const product = {
 
         name:
-          document.getElementById(
-            "productName"
-          ).value.trim(),
+          document
+            .getElementById(
+              "productName"
+            )
+            .value
+            .trim(),
+
 
         price:
           Number(
-            document.getElementById(
-              "productPrice"
-            ).value
+            document
+              .getElementById(
+                "productPrice"
+              )
+              .value
           ),
 
+
         category:
-          document.getElementById(
-            "productCategory"
-          ).value,
+          document
+            .getElementById(
+              "productCategory"
+            )
+            .value,
+
 
         image:
-          document.getElementById(
-            "productImage"
-          ).value.trim(),
+          document
+            .getElementById(
+              "productImage"
+            )
+            .value
+            .trim(),
+
 
         description:
-          document.getElementById(
-            "productDescription"
-          ).value.trim(),
+          document
+            .getElementById(
+              "productDescription"
+            )
+            .value
+            .trim(),
 
-        seller: "Heisjuly Seller"
+
+        seller:
+          "Heisjuly Seller"
 
       };
 
@@ -413,10 +584,14 @@ if (sellForm) {
               method: "POST",
 
               headers: {
-                "Content-Type": "application/json"
+                "Content-Type":
+                  "application/json"
               },
 
-              body: JSON.stringify(product)
+              body:
+                JSON.stringify(
+                  product
+                )
 
             }
           );
@@ -449,15 +624,19 @@ if (sellForm) {
         await loadProducts();
 
 
-        showSection("products");
+        showSection(
+          "products"
+        );
 
 
       } catch (error) {
 
         console.error(error);
 
+
         alert(
-          "Could not connect to the server. Make sure server.js is running."
+          "Could not connect to the server. " +
+          "Make sure server.js is running."
         );
 
       }
@@ -477,14 +656,19 @@ function addToCart(productId) {
   const product =
     products.find(
       item =>
-        String(item._id || item.id) ===
+        String(
+          item._id ||
+          item.id
+        ) ===
         String(productId)
     );
 
 
   if (!product) {
 
-    alert("Product not found.");
+    alert(
+      "Product not found."
+    );
 
     return;
 
@@ -493,7 +677,9 @@ function addToCart(productId) {
 
   cart.push(product);
 
+
   updateCart();
+
 
   alert(
     `${product.name} added to cart.`
@@ -502,10 +688,17 @@ function addToCart(productId) {
 }
 
 
+/* =========================
+   UPDATE CART
+========================= */
+
 function updateCart() {
 
   const cartCount =
-    document.getElementById("cartCount");
+    document.getElementById(
+      "cartCount"
+    );
+
 
   if (cartCount) {
 
@@ -516,14 +709,24 @@ function updateCart() {
 
 
   const cartItems =
-    document.getElementById("cartItems");
+    document.getElementById(
+      "cartItems"
+    );
+
 
   const cartTotal =
-    document.getElementById("cartTotal");
+    document.getElementById(
+      "cartTotal"
+    );
 
 
-  if (!cartItems || !cartTotal) {
+  if (
+    !cartItems ||
+    !cartTotal
+  ) {
+
     return;
+
   }
 
 
@@ -536,52 +739,69 @@ function updateCart() {
   if (cart.length === 0) {
 
     cartItems.innerHTML = `
+
       <p>
         Your cart is empty.
       </p>
+
     `;
 
   }
 
 
-  cart.forEach((item, index) => {
+  cart.forEach(
+    (item, index) => {
 
-    total += Number(item.price);
-
-
-    const div =
-      document.createElement("div");
-
-    div.className = "cart-item";
+      total += Number(
+        item.price
+      );
 
 
-    div.innerHTML = `
-
-      <div>
-
-        <strong>
-          ${escapeHTML(item.name)}
-        </strong>
-
-        <br>
-
-        ${formatPrice(item.price)}
-
-      </div>
-
-      <button
-        class="remove-btn"
-        onclick="removeCartItem(${index})"
-      >
-        Remove
-      </button>
-
-    `;
+      const div =
+        document.createElement(
+          "div"
+        );
 
 
-    cartItems.appendChild(div);
+      div.className =
+        "cart-item";
 
-  });
+
+      div.innerHTML = `
+
+        <div>
+
+          <strong>
+            ${escapeHTML(
+              item.name
+            )}
+          </strong>
+
+          <br>
+
+          ${formatPrice(
+            item.price
+          )}
+
+        </div>
+
+
+        <button
+          class="remove-btn"
+          onclick="removeCartItem(${index})"
+        >
+
+          Remove
+
+        </button>
+
+      `;
+
+
+      cartItems.appendChild(div);
+
+    }
+  );
 
 
   cartTotal.textContent =
@@ -589,6 +809,10 @@ function updateCart() {
 
 }
 
+
+/* =========================
+   REMOVE CART ITEM
+========================= */
 
 function removeCartItem(index) {
 
@@ -599,8 +823,14 @@ function removeCartItem(index) {
 }
 
 
+/* =========================
+   CART BUTTON
+========================= */
+
 const cartBtn =
-  document.getElementById("cartBtn");
+  document.getElementById(
+    "cartBtn"
+  );
 
 
 if (cartBtn) {
@@ -610,10 +840,16 @@ if (cartBtn) {
     () => {
 
       const cartModal =
-        document.getElementById("cartModal");
+        document.getElementById(
+          "cartModal"
+        );
+
 
       if (cartModal) {
-        cartModal.style.display = "block";
+
+        cartModal.style.display =
+          "block";
+
       }
 
     }
@@ -622,10 +858,17 @@ if (cartBtn) {
 }
 
 
+/* =========================
+   CLOSE CART
+========================= */
+
 function closeCart() {
 
   const cartModal =
-    document.getElementById("cartModal");
+    document.getElementById(
+      "cartModal"
+    );
+
 
   if (cartModal) {
 
@@ -637,11 +880,17 @@ function closeCart() {
 }
 
 
+/* =========================
+   CHECKOUT
+========================= */
+
 function checkout() {
 
   if (cart.length === 0) {
 
-    alert("Your cart is empty.");
+    alert(
+      "Your cart is empty."
+    );
 
     return;
 
@@ -666,59 +915,93 @@ function renderBusinesses() {
       "businessContainer"
     );
 
+
   if (!container) return;
+
 
   container.innerHTML = "";
 
 
-  businesses.forEach(business => {
+  businesses.forEach(
+    business => {
 
-    const card =
-      document.createElement("div");
+      const card =
+        document.createElement(
+          "div"
+        );
 
-    card.className = "business-card";
+
+      card.className =
+        "business-card";
 
 
-    card.innerHTML = `
+      card.innerHTML = `
 
-      <img
-        src="${business.image}"
-        alt="${escapeHTML(business.name)}"
-      >
+        <img
+          src="${business.image}"
+          alt="${escapeHTML(
+            business.name
+          )}"
+        >
 
-      <div class="business-content">
 
-        <h3>
-          ${escapeHTML(business.name)}
-        </h3>
+        <div class="business-content">
 
-        <span class="business-category">
-          ${escapeHTML(business.category)}
-        </span>
+          <h3>
 
-        <div class="business-location">
-          📍 ${escapeHTML(business.location)}
+            ${escapeHTML(
+              business.name
+            )}
+
+          </h3>
+
+
+          <span class="business-category">
+
+            ${escapeHTML(
+              business.category
+            )}
+
+          </span>
+
+
+          <div class="business-location">
+
+            📍
+            ${escapeHTML(
+              business.location
+            )}
+
+          </div>
+
+
+          <p>
+
+            ${escapeHTML(
+              business.description
+            )}
+
+          </p>
+
+
+          <a
+            href="tel:${business.phone}"
+            class="contact-btn"
+          >
+
+            Contact Business
+
+          </a>
+
         </div>
 
-        <p>
-          ${escapeHTML(business.description)}
-        </p>
-
-        <a
-          href="tel:${business.phone}"
-          class="contact-btn"
-        >
-          Contact Business
-        </a>
-
-      </div>
-
-    `;
+      `;
 
 
-    container.appendChild(card);
+      container.appendChild(card);
 
-  });
+    }
+  );
 
 }
 
@@ -734,9 +1017,11 @@ function openBusinessForm() {
       "businessModal"
     );
 
+
   if (modal) {
 
-    modal.style.display = "block";
+    modal.style.display =
+      "block";
 
   }
 
@@ -750,14 +1035,20 @@ function closeBusinessForm() {
       "businessModal"
     );
 
+
   if (modal) {
 
-    modal.style.display = "none";
+    modal.style.display =
+      "none";
 
   }
 
 }
 
+
+/* =========================
+   BUSINESS FORM
+========================= */
 
 const businessForm =
   document.getElementById(
@@ -778,46 +1069,75 @@ if (businessForm) {
 
         id: Date.now(),
 
+
         name:
-          document.getElementById(
-            "businessName"
-          ).value.trim(),
+          document
+            .getElementById(
+              "businessName"
+            )
+            .value
+            .trim(),
+
 
         category:
-          document.getElementById(
-            "businessCategory"
-          ).value,
+          document
+            .getElementById(
+              "businessCategory"
+            )
+            .value,
+
 
         location:
-          document.getElementById(
-            "businessLocation"
-          ).value.trim(),
+          document
+            .getElementById(
+              "businessLocation"
+            )
+            .value
+            .trim(),
+
 
         phone:
-          document.getElementById(
-            "businessPhone"
-          ).value.trim(),
+          document
+            .getElementById(
+              "businessPhone"
+            )
+            .value
+            .trim(),
+
 
         image:
-          document.getElementById(
-            "businessImage"
-          ).value.trim(),
+          document
+            .getElementById(
+              "businessImage"
+            )
+            .value
+            .trim(),
+
 
         description:
-          document.getElementById(
-            "businessDescription"
-          ).value.trim()
+          document
+            .getElementById(
+              "businessDescription"
+            )
+            .value
+            .trim()
 
       };
 
 
-      businesses.unshift(business);
+      businesses.unshift(
+        business
+      );
+
 
       renderBusinesses();
 
+
       businessForm.reset();
 
+
       closeBusinessForm();
+
 
       alert(
         "Business published successfully!"
@@ -830,419 +1150,37 @@ if (businessForm) {
 
 
 /* =========================
-   LOGIN / SIGNUP UI
-========================= */
-
-const authModal =
-  document.getElementById(
-    "authModal"
-  );
-
-const authContent =
-  document.getElementById(
-    "authContent"
-  );
-
-
-const signupBtn =
-  document.getElementById(
-    "signupBtn"
-  );
-
-
-const loginBtn =
-  document.getElementById(
-    "loginBtn"
-  );
-
-
-if (signupBtn) {
-
-  signupBtn.addEventListener(
-    "click",
-    showSignup
-  );
-
-}
-
-
-if (loginBtn) {
-
-  loginBtn.addEventListener(
-    "click",
-    showLogin
-  );
-
-}
-
-
-function showSignup() {
-
-  if (!authModal || !authContent) {
-    return;
-  }
-
-
-  authModal.style.display =
-    "block";
-
-
-  authContent.innerHTML = `
-
-    <span class="small-title">
-      HEISJULY ACCOUNT
-    </span>
-
-    <h2 class="auth-title">
-      Create Account
-    </h2>
-
-    <form
-      onsubmit="signup(event)"
-    >
-
-      <label>
-        Full Name
-      </label>
-
-      <input
-        type="text"
-        id="signupName"
-        required
-        placeholder="Your name"
-      >
-
-      <label>
-        Email
-      </label>
-
-      <input
-        type="email"
-        id="signupEmail"
-        required
-        placeholder="you@example.com"
-      >
-
-      <label>
-        Password
-      </label>
-
-      <input
-        type="password"
-        id="signupPassword"
-        required
-        minlength="6"
-        placeholder="Create password"
-      >
-
-      <button
-        class="primary-btn"
-        type="submit"
-      >
-        Create Account
-      </button>
-
-    </form>
-
-    <div class="auth-switch">
-
-      Already have an account?
-
-      <button onclick="showLogin()">
-        Login
-      </button>
-
-    </div>
-
-  `;
-
-}
-
-
-function showLogin() {
-
-  if (!authModal || !authContent) {
-    return;
-  }
-
-
-  authModal.style.display =
-    "block";
-
-
-  authContent.innerHTML = `
-
-    <span class="small-title">
-      HEISJULY ACCOUNT
-    </span>
-
-    <h2 class="auth-title">
-      Welcome Back
-    </h2>
-
-    <form
-      onsubmit="login(event)"
-    >
-
-      <label>
-        Email
-      </label>
-
-      <input
-        type="email"
-        id="loginEmail"
-        required
-        placeholder="you@example.com"
-      >
-
-      <label>
-        Password
-      </label>
-
-      <input
-        type="password"
-        id="loginPassword"
-        required
-        placeholder="Your password"
-      >
-
-      <button
-        class="primary-btn"
-        type="submit"
-      >
-        Login
-      </button>
-
-    </form>
-
-    <div class="auth-switch">
-
-      Don't have an account?
-
-      <button onclick="showSignup()">
-        Sign Up
-      </button>
-
-    </div>
-
-  `;
-
-}
-
-
-function closeAuth() {
-
-  if (authModal) {
-
-    authModal.style.display =
-      "none";
-
-  }
-
-}
-
-
-/* =========================
-   SIGNUP
-========================= */
-
-async function signup(event) {
-
-  event.preventDefault();
-
-
-  const name =
-    document.getElementById(
-      "signupName"
-    ).value.trim();
-
-
-  const email =
-    document.getElementById(
-      "signupEmail"
-    ).value.trim();
-
-
-  const password =
-    document.getElementById(
-      "signupPassword"
-    ).value;
-
-
-  try {
-
-    const response =
-      await fetch(
-        `${API_URL}/api/auth/signup`,
-        {
-
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json"
-          },
-
-          body: JSON.stringify({
-            name,
-            email,
-            password
-          })
-
-        }
-      );
-
-
-    const data =
-      await response.json();
-
-
-    if (!response.ok) {
-
-      alert(
-        data.message ||
-        "Signup failed."
-      );
-
-      return;
-
-    }
-
-
-    localStorage.setItem(
-      "heisjulyToken",
-      data.token
-    );
-
-
-    localStorage.setItem(
-      "heisjulyUser",
-      JSON.stringify(data.user)
-    );
-
-
-    alert(
-      "Account created successfully!"
-    );
-
-
-    closeAuth();
-
-  } catch (error) {
-
-    console.error(error);
-
-    alert(
-      "Could not connect to the server."
-    );
-
-  }
-
-}
-
-
-/* =========================
-   LOGIN
-========================= */
-
-async function login(event) {
-
-  event.preventDefault();
-
-
-  const email =
-    document.getElementById(
-      "loginEmail"
-    ).value.trim();
-
-
-  const password =
-    document.getElementById(
-      "loginPassword"
-    ).value;
-
-
-  try {
-
-    const response =
-      await fetch(
-        `${API_URL}/api/auth/login`,
-        {
-
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json"
-          },
-
-          body: JSON.stringify({
-            email,
-            password
-          })
-
-        }
-      );
-
-
-    const data =
-      await response.json();
-
-
-    if (!response.ok) {
-
-      alert(
-        data.message ||
-        "Login failed."
-      );
-
-      return;
-
-    }
-
-
-    localStorage.setItem(
-      "heisjulyToken",
-      data.token
-    );
-
-
-    localStorage.setItem(
-      "heisjulyUser",
-      JSON.stringify(data.user)
-    );
-
-
-    alert(
-      "Login successful!"
-    );
-
-
-    closeAuth();
-
-  } catch (error) {
-
-    console.error(error);
-
-    alert(
-      "Could not connect to the server."
-    );
-
-  }
-
-}
-
-
-/* =========================
    ESCAPE HTML
 ========================= */
 
 function escapeHTML(value) {
 
   return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
@@ -1260,35 +1198,30 @@ window.addEventListener(
         "cartModal"
       );
 
+
     const businessModal =
       document.getElementById(
         "businessModal"
       );
 
-    const authModal =
-      document.getElementById(
-        "authModal"
-      );
-
 
     if (
-      event.target === cartModal
+      event.target ===
+      cartModal
     ) {
+
       closeCart();
+
     }
 
 
     if (
-      event.target === businessModal
+      event.target ===
+      businessModal
     ) {
+
       closeBusinessForm();
-    }
 
-
-    if (
-      event.target === authModal
-    ) {
-      closeAuth();
     }
 
   }
