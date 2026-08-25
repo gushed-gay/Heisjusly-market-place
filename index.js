@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000";
+const API_URL = "https://market-place-backend-w4c1.onrender.com";
 
 /* =========================
    LOCAL DATA
@@ -13,6 +13,7 @@ let businesses = [
     category: "Fashion",
     location: "Lagos, Nigeria",
     phone: "+2348012345678",
+    email: "",
     image:
       "https://images.unsplash.com/photo-1445205170230-053b83016050",
     description: "Modern fashion and custom clothing."
@@ -93,7 +94,7 @@ function formatPrice(price) {
 
 
 /* =========================
-   LOAD PRODUCTS FROM SERVER
+   LOAD PRODUCTS
 ========================= */
 
 async function loadProducts() {
@@ -124,7 +125,10 @@ async function loadProducts() {
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      "Load products error:",
+      error
+    );
 
 
     const productsContainer =
@@ -280,42 +284,61 @@ function renderProducts() {
 
 
         <span class="product-category">
-
-          ${escapeHTML(
-            product.category
-          )}
-
+          ${escapeHTML(product.category)}
         </span>
 
 
         <div class="product-price">
-
-          ${formatPrice(
-            product.price
-          )}
-
+          ${formatPrice(product.price)}
         </div>
 
 
         <p>
-
-          ${escapeHTML(
-            product.description
-          )}
-
+          ${escapeHTML(product.description)}
         </p>
+
+
+        <p>
+          <strong>Seller:</strong>
+          ${escapeHTML(product.seller || "")}
+        </p>
+
+
+        ${
+          product.seller_phone
+            ? `
+              <a
+                href="tel:${escapeHTML(product.seller_phone)}"
+                class="contact-btn"
+              >
+                📞 Call Seller
+              </a>
+            `
+            : ""
+        }
+
+
+        ${
+          product.seller_email
+            ? `
+              <a
+                href="mailto:${escapeHTML(product.seller_email)}"
+                class="contact-btn"
+              >
+                ✉️ Email Seller
+              </a>
+            `
+            : ""
+        }
 
 
         <button
           class="buy-btn"
           onclick="addToCart('${
-            product._id ||
             product.id
           }')"
         >
-
           Add to Cart
-
         </button>
 
       </div>
@@ -367,49 +390,32 @@ function renderFeatured() {
             product.image ||
             "https://via.placeholder.com/500"
           }"
-          alt="${escapeHTML(
-            product.name
-          )}"
+          alt="${escapeHTML(product.name)}"
         >
 
 
         <div class="product-info">
 
           <h3>
-            ${escapeHTML(
-              product.name
-            )}
+            ${escapeHTML(product.name)}
           </h3>
 
 
           <span class="product-category">
-
-            ${escapeHTML(
-              product.category
-            )}
-
+            ${escapeHTML(product.category)}
           </span>
 
 
           <div class="product-price">
-
-            ${formatPrice(
-              product.price
-            )}
-
+            ${formatPrice(product.price)}
           </div>
 
 
           <button
             class="buy-btn"
-            onclick="addToCart('${
-              product._id ||
-              product.id
-            }')"
+            onclick="addToCart('${product.id}')"
           >
-
             Add to Cart
-
           </button>
 
         </div>
@@ -487,6 +493,47 @@ function filterCategory(category) {
 
 
 /* =========================
+   IMAGE TO DATA URL
+========================= */
+
+function imageToDataURL(file) {
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload = () => {
+
+        resolve(
+          reader.result
+        );
+
+      };
+
+
+      reader.onerror = () => {
+
+        reject(
+          new Error(
+            "Could not read image"
+          )
+        );
+
+      };
+
+
+      reader.readAsDataURL(file);
+
+    }
+  );
+
+}
+
+
+/* =========================
    POST PRODUCT
 ========================= */
 
@@ -505,68 +552,52 @@ if (sellForm) {
       event.preventDefault();
 
 
-      const product = {
-
-        name:
-          document
-            .getElementById(
-              "productName"
-            )
-            .value
-            .trim(),
+      const imageInput =
+        document.getElementById(
+          "productImage"
+        );
 
 
-        price:
-          Number(
-            document
-              .getElementById(
-                "productPrice"
-              )
-              .value
-          ),
+      const imageFile =
+        imageInput &&
+        imageInput.files
+          ? imageInput.files[0]
+          : null;
 
 
-        category:
-          document
-            .getElementById(
-              "productCategory"
-            )
-            .value,
+      if (!imageFile) {
 
+        alert(
+          "Please select a product image."
+        );
 
-        image:
-          document
-            .getElementById(
-              "productImage"
-            )
-            .value
-            .trim(),
+        return;
 
-
-        description:
-          document
-            .getElementById(
-              "productDescription"
-            )
-            .value
-            .trim(),
-
-
-        seller:
-          "Heisjuly Seller"
-
-      };
+      }
 
 
       if (
-        !product.name ||
-        !product.price ||
-        !product.category ||
-        !product.description
+        !imageFile.type.startsWith(
+          "image/"
+        )
       ) {
 
         alert(
-          "Please fill in all required fields."
+          "Please select a valid image."
+        );
+
+        return;
+
+      }
+
+
+      if (
+        imageFile.size >
+        2 * 1024 * 1024
+      ) {
+
+        alert(
+          "Please choose an image smaller than 2MB."
         );
 
         return;
@@ -575,6 +606,101 @@ if (sellForm) {
 
 
       try {
+
+        const image =
+          await imageToDataURL(
+            imageFile
+          );
+
+
+        const product = {
+
+          name:
+            document
+              .getElementById(
+                "productName"
+              )
+              .value
+              .trim(),
+
+
+          price:
+            Number(
+              document
+                .getElementById(
+                  "productPrice"
+                )
+                .value
+            ),
+
+
+          category:
+            document
+              .getElementById(
+                "productCategory"
+              )
+              .value,
+
+
+          image: image,
+
+
+          description:
+            document
+              .getElementById(
+                "productDescription"
+              )
+              .value
+              .trim(),
+
+
+          seller:
+            document
+              .getElementById(
+                "sellerName"
+              )
+              .value
+              .trim(),
+
+
+          seller_phone:
+            document
+              .getElementById(
+                "sellerPhone"
+              )
+              .value
+              .trim(),
+
+
+          seller_email:
+            document
+              .getElementById(
+                "sellerEmail"
+              )
+              .value
+              .trim()
+
+        };
+
+
+        if (
+          !product.name ||
+          !product.price ||
+          !product.category ||
+          !product.description ||
+          !product.seller ||
+          !product.seller_phone ||
+          !product.seller_email
+        ) {
+
+          alert(
+            "Please fill in all required fields."
+          );
+
+          return;
+
+        }
+
 
         const response =
           await fetch(
@@ -602,6 +728,8 @@ if (sellForm) {
 
 
         if (!response.ok) {
+
+          console.error(data);
 
           alert(
             data.message ||
@@ -631,12 +759,14 @@ if (sellForm) {
 
       } catch (error) {
 
-        console.error(error);
+        console.error(
+          "Post product error:",
+          error
+        );
 
 
         alert(
-          "Could not connect to the server. " +
-          "Make sure server.js is running."
+          "Could not connect to the server."
         );
 
       }
@@ -656,10 +786,7 @@ function addToCart(productId) {
   const product =
     products.find(
       item =>
-        String(
-          item._id ||
-          item.id
-        ) ===
+        String(item.id) ===
         String(productId)
     );
 
@@ -772,16 +899,12 @@ function updateCart() {
         <div>
 
           <strong>
-            ${escapeHTML(
-              item.name
-            )}
+            ${escapeHTML(item.name)}
           </strong>
 
           <br>
 
-          ${formatPrice(
-            item.price
-          )}
+          ${formatPrice(item.price)}
 
         </div>
 
@@ -790,9 +913,7 @@ function updateCart() {
           class="remove-btn"
           onclick="removeCartItem(${index})"
         >
-
           Remove
-
         </button>
 
       `;
@@ -938,7 +1059,10 @@ function renderBusinesses() {
       card.innerHTML = `
 
         <img
-          src="${business.image}"
+          src="${
+            business.image ||
+            "https://via.placeholder.com/500"
+          }"
           alt="${escapeHTML(
             business.name
           )}"
@@ -948,50 +1072,64 @@ function renderBusinesses() {
         <div class="business-content">
 
           <h3>
-
             ${escapeHTML(
               business.name
             )}
-
           </h3>
 
 
           <span class="business-category">
-
             ${escapeHTML(
               business.category
             )}
-
           </span>
 
 
           <div class="business-location">
-
             📍
             ${escapeHTML(
               business.location
             )}
-
           </div>
 
 
           <p>
-
             ${escapeHTML(
               business.description
             )}
-
           </p>
 
 
-          <a
-            href="tel:${business.phone}"
-            class="contact-btn"
-          >
+          ${
+            business.phone
+              ? `
+                <a
+                  href="tel:${escapeHTML(
+                    business.phone
+                  )}"
+                  class="contact-btn"
+                >
+                  📞 Call Business
+                </a>
+              `
+              : ""
+          }
 
-            Contact Business
 
-          </a>
+          ${
+            business.email
+              ? `
+                <a
+                  href="mailto:${escapeHTML(
+                    business.email
+                  )}"
+                  class="contact-btn"
+                >
+                  ✉️ Email Business
+                </a>
+              `
+              : ""
+          }
 
         </div>
 
@@ -1105,13 +1243,17 @@ if (businessForm) {
             .trim(),
 
 
-        image:
+        email:
           document
             .getElementById(
-              "businessImage"
+              "businessEmail"
             )
             .value
             .trim(),
+
+
+        image:
+          "",
 
 
         description:
