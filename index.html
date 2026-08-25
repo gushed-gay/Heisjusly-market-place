@@ -3,566 +3,386 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Heisjuly Marketplace</title>
-
   <link rel="stylesheet" href="./index.css">
 </head>
 
 <body>
 
-  <!-- HEADER -->
-  <header class="header">
+<header class="header">
+  <div class="logo">
+    <span>Heisjuly</span>
+    Marketplace
+  </div>
 
-    <div class="logo">
-      <span>Heisjuly</span>
-      Marketplace
-    </div>
-
-    <div class="header-actions">
-
-      <button id="cartBtn">
-        🛒 <span id="cartCount">0</span>
-      </button>
-
-    </div>
-
-  </header>
-
-
-  <!-- NAVIGATION -->
-  <nav class="nav">
-
-    <button class="nav-link active" data-section="home">
-      Home
+  <div class="header-actions">
+    <button id="cartBtn" type="button">
+      🛒 <span id="cartCount">0</span>
     </button>
+  </div>
+</header>
 
-    <button class="nav-link" data-section="products">
-      Products
-    </button>
+<nav class="nav">
+  <button class="nav-link active" data-section="home" type="button">Home</button>
+  <button class="nav-link" data-section="products" type="button">Products</button>
+  <button class="nav-link" data-section="business" type="button">Businesses</button>
+  <button class="nav-link" data-section="sell" type="button">Sell</button>
+</nav>
 
-    <button class="nav-link" data-section="business">
-      Businesses
-    </button>
+<section id="home" class="page active-page">
 
-    <button class="nav-link" data-section="sell">
-      Sell
-    </button>
+  <div class="hero">
+    <div class="hero-content">
+      <span class="hero-badge">HEISJULY MARKETPLACE</span>
 
-  </nav>
+      <h1>Buy. Sell. Grow.</h1>
 
+      <p>
+        Discover products, find businesses and connect with sellers around you.
+      </p>
 
-  <!-- HOME -->
-  <section id="home" class="page active-page">
+      <div class="hero-buttons">
+        <button class="primary-btn" onclick="showSection('products')" type="button">
+          Shop Now
+        </button>
 
-    <div class="hero">
-
-      <div class="hero-content">
-
-        <span class="hero-badge">
-          HEISJULY MARKETPLACE
-        </span>
-
-        <h1>Buy. Sell. Grow.</h1>
-
-        <p>
-          Discover products, find businesses and
-          connect with sellers around you.
-        </p>
-
-        <div class="hero-buttons">
-
-          <button
-            class="primary-btn"
-            onclick="showSection('products')"
-          >
-            Shop Now
-          </button>
-
-          <button
-            class="secondary-btn"
-            onclick="showSection('sell')"
-          >
-            Start Selling
-          </button>
-
-        </div>
-
+        <button class="secondary-btn" onclick="showSection('sell')" type="button">
+          Start Selling
+        </button>
       </div>
-
     </div>
+  </div>
 
+  <div class="search-box">
+    <input
+      type="search"
+      id="searchInput"
+      placeholder="Search products, city or area..."
+    >
 
-    <!-- SEARCH -->
-    <div class="search-box">
+    <button id="searchBtn" type="button">🔍</button>
+  </div>
+
+  <div class="container">
+
+    <h2>Find Products Near You</h2>
+
+    <div class="location-search">
 
       <input
-        type="search"
-        id="searchInput"
-        placeholder="Search products..."
+        type="text"
+        id="locationSearch"
+        placeholder="Search location e.g. Agbor, Abraka, Asaba..."
       >
 
-      <button id="searchBtn">
-        🔍
+      <button id="locationSearchBtn" type="button">
+        📍 Search Location
+      </button>
+
+      <button id="myLocationBtn" type="button">
+        📌 Use My Location
       </button>
 
     </div>
 
+    <div id="map" class="map-container"></div>
 
-    <!-- CATEGORIES -->
-    <div class="container">
+  </div>
 
-      <h2>Browse Categories</h2>
+  <div class="container">
 
-      <div class="categories">
+    <h2>Browse Categories</h2>
 
-        <button onclick="filterCategory('phones')">
-          📱
-          <span>Phones</span>
-        </button>
+    <div class="categories">
 
-        <button onclick="filterCategory('electronics')">
-          💻
-          <span>Electronics</span>
-        </button>
+      <button onclick="filterCategory('phones')" type="button">
+        📱
+        <span>Phones</span>
+      </button>
 
-        <button onclick="filterCategory('fashion')">
-          👕
-          <span>Fashion</span>
-        </button>
+      <button onclick="filterCategory('electronics')" type="button">
+        💻
+        <span>Electronics</span>
+      </button>
 
-        <button onclick="filterCategory('home')">
-          🏠
-          <span>Home</span>
-        </button>
+      <button onclick="filterCategory('fashion')" type="button">
+        👕
+        <span>Fashion</span>
+      </button>
 
-        <button onclick="filterCategory('food')">
-          🍔
-          <span>Food</span>
-        </button>
+      <button onclick="filterCategory('home')" type="button">
+        🏠
+        <span>Home</span>
+      </button>
 
-        <button onclick="filterCategory('services')">
-          🛠️
-          <span>Services</span>
-        </button>
+      <button onclick="filterCategory('food')" type="button">
+        🍔
+        <span>Food</span>
+      </button>
 
-      </div>
-
-    </div>
-
-
-    <!-- FEATURED PRODUCTS -->
-    <div class="container">
-
-      <div class="section-heading">
-
-        <h2>Featured Products</h2>
-
-        <button onclick="showSection('products')">
-          View all
-        </button>
-
-      </div>
-
-      <div
-        class="product-grid"
-        id="featuredProducts"
-      ></div>
+      <button onclick="filterCategory('services')" type="button">
+        🛠️
+        <span>Services</span>
+      </button>
 
     </div>
 
+  </div>
 
-    <!-- BUSINESS BANNER -->
-    <div class="business-banner">
+  <div class="container">
+
+    <div class="section-heading">
+
+      <h2>Featured Products</h2>
+
+      <button onclick="showSection('products')" type="button">
+        View all
+      </button>
+
+    </div>
+
+    <div class="product-grid" id="featuredProducts"></div>
+
+  </div>
+
+  <div class="business-banner">
+
+    <div>
+      <span>HAVE A BUSINESS?</span>
+
+      <h2>
+        Put your business in front of customers.
+      </h2>
+
+      <p>
+        Promote your business or service on Heisjuly Marketplace.
+      </p>
+    </div>
+
+    <button onclick="showSection('business')" type="button">
+      Promote Business
+    </button>
+
+  </div>
+
+</section>
+
+<section id="products" class="page">
+
+  <div class="container page-container">
+
+    <div class="section-heading">
 
       <div>
-
-        <span>HAVE A BUSINESS?</span>
-
-        <h2>
-          Put your business in front of customers.
-        </h2>
-
-        <p>
-          Promote your business or service on
-          Heisjuly Marketplace.
-        </p>
-
+        <span class="small-title">MARKETPLACE</span>
+        <h1>Products</h1>
       </div>
 
-      <button onclick="showSection('business')">
-        Promote Business
+      <select id="categoryFilter">
+
+        <option value="all">All Categories</option>
+        <option value="phones">Phones</option>
+        <option value="electronics">Electronics</option>
+        <option value="fashion">Fashion</option>
+        <option value="home">Home</option>
+        <option value="food">Food</option>
+        <option value="services">Services</option>
+
+      </select>
+
+    </div>
+
+    <div class="location-filter">
+
+      <input
+        type="text"
+        id="productLocationFilter"
+        placeholder="Filter by city or area..."
+      >
+
+      <button id="filterLocationBtn" type="button">
+        📍 Find
       </button>
 
     </div>
 
-  </section>
+    <div class="product-grid" id="productsContainer"></div>
 
+  </div>
 
-  <!-- PRODUCTS -->
-  <section id="products" class="page">
+</section>
 
-    <div class="container page-container">
+<section id="business" class="page">
 
-      <div class="section-heading">
+  <div class="container page-container">
 
-        <div>
+    <div class="section-heading">
 
-          <span class="small-title">
-            MARKETPLACE
-          </span>
-
-          <h1>Products</h1>
-
-        </div>
-
-        <select id="categoryFilter">
-
-          <option value="all">
-            All Categories
-          </option>
-
-          <option value="phones">
-            Phones
-          </option>
-
-          <option value="electronics">
-            Electronics
-          </option>
-
-          <option value="fashion">
-            Fashion
-          </option>
-
-          <option value="home">
-            Home
-          </option>
-
-          <option value="food">
-            Food
-          </option>
-
-          <option value="services">
-            Services
-          </option>
-
-        </select>
-
+      <div>
+        <span class="small-title">BUSINESS DIRECTORY</span>
+        <h1>Active Businesses</h1>
       </div>
-
-      <div
-        class="product-grid"
-        id="productsContainer"
-      ></div>
-
-    </div>
-
-  </section>
-
-
-  <!-- BUSINESSES -->
-  <section id="business" class="page">
-
-    <div class="container page-container">
-
-      <div class="section-heading">
-
-        <div>
-
-          <span class="small-title">
-            BUSINESS DIRECTORY
-          </span>
-
-          <h1>Active Businesses</h1>
-
-        </div>
-
-        <button
-          class="primary-small"
-          onclick="openBusinessForm()"
-        >
-          + Promote Business
-        </button>
-
-      </div>
-
-      <div
-        class="business-grid"
-        id="businessContainer"
-      ></div>
-
-    </div>
-
-  </section>
-
-
-  <!-- SELL -->
-  <section id="sell" class="page">
-
-    <div class="container page-container">
-
-      <div class="form-card">
-
-        <span class="small-title">
-          SELL ON HEISJULY
-        </span>
-
-        <h1>List Your Product</h1>
-
-        <p>
-          Add your product and let customers discover it.
-        </p>
-
-        <form id="sellForm">
-
-          <label>Product Name</label>
-
-          <input
-            id="productName"
-            type="text"
-            placeholder="e.g. iPhone 15"
-            required
-          >
-
-
-          <label>Price (₦)</label>
-
-          <input
-            id="productPrice"
-            type="number"
-            placeholder="850000"
-            required
-          >
-
-
-          <label>Category</label>
-
-          <select
-            id="productCategory"
-            required
-          >
-
-            <option value="">
-              Choose category
-            </option>
-
-            <option value="phones">
-              Phones
-            </option>
-
-            <option value="electronics">
-              Electronics
-            </option>
-
-            <option value="fashion">
-              Fashion
-            </option>
-
-            <option value="home">
-              Home
-            </option>
-
-            <option value="food">
-              Food
-            </option>
-
-            <option value="services">
-              Services
-            </option>
-
-          </select>
-
-
-          <label>Product Image</label>
-
-          <input
-            id="productImage"
-            type="file"
-            accept="image/*"
-            required
-          >
-
-
-          <label>Seller Name</label>
-
-          <input
-            id="sellerName"
-            type="text"
-            placeholder="Your name"
-            required
-          >
-
-
-          <label>Phone Number</label>
-
-          <input
-            id="sellerPhone"
-            type="tel"
-            placeholder="+234 800 000 0000"
-            required
-          >
-
-
-          <label>Email Address</label>
-
-          <input
-            id="sellerEmail"
-            type="email"
-            placeholder="you@example.com"
-            required
-          >
-
-
-          <label>Description</label>
-
-          <textarea
-            id="productDescription"
-            placeholder="Describe your product..."
-            required
-          ></textarea>
-
-
-          <button
-            class="primary-btn"
-            type="submit"
-          >
-            Publish Product
-          </button>
-
-        </form>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- BUSINESS MODAL -->
-  <div
-    class="modal"
-    id="businessModal"
-  >
-
-    <div class="modal-card">
 
       <button
-        class="close-btn"
-        onclick="closeBusinessForm()"
+        class="primary-small"
+        onclick="openBusinessForm()"
+        type="button"
       >
-        ×
+        + Promote Business
       </button>
 
-      <span class="small-title">
-        BUSINESS PROMOTION
-      </span>
+    </div>
 
-      <h2>Promote Your Business</h2>
+    <div class="business-grid" id="businessContainer"></div>
 
-      <form id="businessForm">
+  </div>
 
-        <label>Business Name</label>
+</section>
+
+<section id="sell" class="page">
+
+  <div class="container page-container">
+
+    <div class="form-card">
+
+      <span class="small-title">SELL ON HEISJULY</span>
+
+      <h1>List Your Product</h1>
+
+      <p>
+        Add your product and let customers discover it.
+      </p>
+
+      <form id="sellForm">
+
+        <label for="productName">Product Name</label>
 
         <input
-          id="businessName"
+          id="productName"
           type="text"
-          placeholder="Business name"
+          placeholder="e.g. iPhone 15"
           required
         >
 
+        <label for="productPrice">Price (₦)</label>
 
-        <label>Category</label>
-
-        <select
-          id="businessCategory"
+        <input
+          id="productPrice"
+          type="number"
+          placeholder="850000"
+          min="0"
           required
         >
 
-          <option value="">
-            Choose category
-          </option>
+        <label for="productCategory">Category</label>
 
-          <option value="Food">
-            Food
-          </option>
+        <select id="productCategory" required>
 
-          <option value="Fashion">
-            Fashion
-          </option>
-
-          <option value="Technology">
-            Technology
-          </option>
-
-          <option value="Beauty">
-            Beauty
-          </option>
-
-          <option value="Services">
-            Services
-          </option>
-
-          <option value="Education">
-            Education
-          </option>
+          <option value="">Choose category</option>
+          <option value="phones">Phones</option>
+          <option value="electronics">Electronics</option>
+          <option value="fashion">Fashion</option>
+          <option value="home">Home</option>
+          <option value="food">Food</option>
+          <option value="services">Services</option>
 
         </select>
 
-
-        <label>Location</label>
-
-        <input
-          id="businessLocation"
-          type="text"
-          placeholder="Lagos, Nigeria"
-          required
-        >
-
-
-        <label>Phone Number</label>
+        <label for="productImage">Product Image</label>
 
         <input
-          id="businessPhone"
-          type="tel"
-          placeholder="+234..."
-          required
-        >
-
-
-        <label>Email Address</label>
-
-        <input
-          id="businessEmail"
-          type="email"
-          placeholder="business@example.com"
-          required
-        >
-
-
-        <label>Business Image</label>
-
-        <input
-          id="businessImage"
+          id="productImage"
           type="file"
           accept="image/*"
           required
         >
 
+        <label for="sellerName">Seller Name</label>
 
-        <label>Description</label>
+        <input
+          id="sellerName"
+          type="text"
+          placeholder="Your name"
+          required
+        >
+
+        <label for="sellerPhone">
+          Phone Number
+          (Optional)
+        </label>
+
+        <input
+          id="sellerPhone"
+          type="tel"
+          placeholder="+234 800 000 0000"
+        >
+
+        <label for="sellerEmail">
+          Email Address
+          (Optional)
+        </label>
+
+        <input
+          id="sellerEmail"
+          type="email"
+          placeholder="you@example.com"
+        >
+
+        <label for="productLocation">
+          Product Location
+        </label>
+
+        <input
+          id="productLocation"
+          type="text"
+          placeholder="e.g. Agbor, Delta State"
+          required
+        >
+
+        <label for="productArea">
+          Area / Town
+        </label>
+
+        <input
+          id="productArea"
+          type="text"
+          placeholder="e.g. Boji-Boji, Agbor"
+          required
+        >
+
+        <input
+          id="productLatitude"
+          type="hidden"
+        >
+
+        <input
+          id="productLongitude"
+          type="hidden"
+        >
+
+        <button
+          type="button"
+          id="getSellerLocationBtn"
+          class="secondary-btn"
+        >
+          📍 Use My Current Location
+        </button>
+
+        <label for="productDescription">
+          Description
+        </label>
 
         <textarea
-          id="businessDescription"
-          placeholder="Describe your business..."
+          id="productDescription"
+          placeholder="Describe your product..."
           required
         ></textarea>
-
 
         <button
           class="primary-btn"
           type="submit"
         >
-          Publish Business
+          Publish Product
         </button>
 
       </form>
@@ -571,68 +391,209 @@
 
   </div>
 
+</section>
 
-  <!-- CART -->
-  <div
-    class="modal"
-    id="cartModal"
-  >
+<div class="modal" id="businessModal">
 
-    <div class="modal-card cart-card">
+  <div class="modal-card">
+
+    <button
+      class="close-btn"
+      onclick="closeBusinessForm()"
+      type="button"
+    >
+      ×
+    </button>
+
+    <span class="small-title">
+      BUSINESS PROMOTION
+    </span>
+
+    <h2>Promote Your Business</h2>
+
+    <form id="businessForm">
+
+      <label for="businessName">
+        Business Name
+      </label>
+
+      <input
+        id="businessName"
+        type="text"
+        placeholder="Business name"
+        required
+      >
+
+      <label for="businessCategory">
+        Category
+      </label>
+
+      <select id="businessCategory" required>
+
+        <option value="">
+          Choose category
+        </option>
+
+        <option value="Food">Food</option>
+        <option value="Fashion">Fashion</option>
+        <option value="Technology">Technology</option>
+        <option value="Beauty">Beauty</option>
+        <option value="Services">Services</option>
+        <option value="Education">Education</option>
+
+      </select>
+
+      <label for="businessLocation">
+        Location
+      </label>
+
+      <input
+        id="businessLocation"
+        type="text"
+        placeholder="e.g. Asaba, Delta State"
+        required
+      >
+
+      <label for="businessArea">
+        Area / Town
+      </label>
+
+      <input
+        id="businessArea"
+        type="text"
+        placeholder="e.g. Okpanam, Asaba"
+        required
+      >
+
+      <label for="businessPhone">
+        Phone Number
+        (Optional)
+      </label>
+
+      <input
+        id="businessPhone"
+        type="tel"
+        placeholder="+234 800 000 0000"
+      >
+
+      <label for="businessEmail">
+        Email Address
+        (Optional)
+      </label>
+
+      <input
+        id="businessEmail"
+        type="email"
+        placeholder="business@example.com"
+      >
+
+      <label for="businessImage">
+        Business Image
+      </label>
+
+      <input
+        id="businessImage"
+        type="file"
+        accept="image/*"
+        required
+      >
+
+      <input
+        id="businessLatitude"
+        type="hidden"
+      >
+
+      <input
+        id="businessLongitude"
+        type="hidden"
+      >
 
       <button
-        class="close-btn"
-        onclick="closeCart()"
+        type="button"
+        id="getBusinessLocationBtn"
+        class="secondary-btn"
       >
-        ×
+        📍 Use My Current Location
       </button>
 
-      <h2>Your Cart</h2>
+      <label for="businessDescription">
+        Description
+      </label>
 
-      <div id="cartItems"></div>
-
-      <div class="cart-total">
-
-        <span>Total</span>
-
-        <strong id="cartTotal">
-          ₦0
-        </strong>
-
-      </div>
+      <textarea
+        id="businessDescription"
+        placeholder="Describe your business..."
+        required
+      ></textarea>
 
       <button
         class="primary-btn"
-        onclick="checkout()"
+        type="submit"
       >
-        Checkout
+        Publish Business
       </button>
 
-    </div>
+    </form>
 
   </div>
 
+</div>
 
-  <!-- FOOTER -->
-  <footer>
+<div class="modal" id="cartModal">
 
-    <div class="footer-logo">
-      Heisjuly Marketplace
+  <div class="modal-card cart-card">
+
+    <button
+      class="close-btn"
+      onclick="closeCart()"
+      type="button"
+    >
+      ×
+    </button>
+
+    <h2>Your Cart</h2>
+
+    <div id="cartItems"></div>
+
+    <div class="cart-total">
+
+      <span>Total</span>
+
+      <strong id="cartTotal">
+        ₦0
+      </strong>
+
     </div>
 
-    <p>
-      A marketplace for buying, selling and growing businesses.
-    </p>
+    <button
+      class="primary-btn"
+      onclick="checkout()"
+      type="button"
+    >
+      Checkout
+    </button>
 
-    <p class="copyright">
-      © 2026 Heisjuly Marketplace
-    </p>
+  </div>
 
-  </footer>
+</div>
 
+<footer>
 
-  <!-- JAVASCRIPT -->
-  <script src="./index.js"></script>
+  <div class="footer-logo">
+    Heisjuly Marketplace
+  </div>
+
+  <p>
+    A marketplace for buying, selling and growing businesses.
+  </p>
+
+  <p class="copyright">
+    © 2026 Heisjuly Marketplace
+  </p>
+
+</footer>
+
+<script src="./index.js"></script>
 
 </body>
 </html>
