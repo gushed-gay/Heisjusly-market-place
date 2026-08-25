@@ -71,6 +71,73 @@ function formatPrice(price) {
 
 
 /* =========================
+   TIME POSTED
+========================= */
+
+function timeAgo(date) {
+
+  if (!date) {
+    return "";
+  }
+
+  const postedTime = new Date(date).getTime();
+
+  if (isNaN(postedTime)) {
+    return "";
+  }
+
+  const seconds = Math.floor(
+    (Date.now() - postedTime) / 1000
+  );
+
+
+  if (seconds < 60) {
+    return "Just now";
+  }
+
+
+  const minutes = Math.floor(seconds / 60);
+
+  if (minutes < 60) {
+    return `${minutes} min${minutes === 1 ? "" : "s"} ago`;
+  }
+
+
+  const hours = Math.floor(minutes / 60);
+
+  if (hours < 24) {
+    return `${hours} hr${hours === 1 ? "" : "s"} ago`;
+  }
+
+
+  const days = Math.floor(hours / 24);
+
+  if (days < 7) {
+    return `${days} day${days === 1 ? "" : "s"} ago`;
+  }
+
+
+  const weeks = Math.floor(days / 7);
+
+  if (weeks < 4) {
+    return `${weeks} week${weeks === 1 ? "" : "s"} ago`;
+  }
+
+
+  const months = Math.floor(days / 30);
+
+  if (months < 12) {
+    return `${months} month${months === 1 ? "" : "s"} ago`;
+  }
+
+
+  const years = Math.floor(days / 365);
+
+  return `${years} year${years === 1 ? "" : "s"} ago`;
+}
+
+
+/* =========================
    LOAD PRODUCTS
 ========================= */
 
@@ -241,22 +308,40 @@ function renderProducts() {
           ${escapeHTML(product.name)}
         </h3>
 
+
         <span class="product-category">
           ${escapeHTML(product.category || "")}
         </span>
+
+
+        <!-- TIME POSTED -->
+
+        ${
+          product.created_at
+            ? `
+              <div class="product-time">
+                🕒 ${timeAgo(product.created_at)}
+              </div>
+            `
+            : ""
+        }
+
 
         <div class="product-price">
           ${formatPrice(product.price)}
         </div>
 
+
         <p>
           ${escapeHTML(product.description || "")}
         </p>
+
 
         <p>
           <strong>Seller:</strong>
           ${escapeHTML(product.seller || "Seller")}
         </p>
+
 
         ${
           location
@@ -277,6 +362,7 @@ function renderProducts() {
             : ""
         }
 
+
         <div class="seller-contact">
 
           ${
@@ -292,6 +378,7 @@ function renderProducts() {
               : ""
           }
 
+
           ${
             product.seller_email
               ? `
@@ -306,6 +393,7 @@ function renderProducts() {
           }
 
         </div>
+
 
         <button
           class="buy-btn"
@@ -364,19 +452,34 @@ function renderFeatured() {
         alt="${escapeHTML(product.name)}"
       >
 
+
       <div class="product-info">
 
         <h3>
           ${escapeHTML(product.name)}
         </h3>
 
+
         <span class="product-category">
           ${escapeHTML(product.category || "")}
         </span>
 
+
+        ${
+          product.created_at
+            ? `
+              <div class="product-time">
+                🕒 ${timeAgo(product.created_at)}
+              </div>
+            `
+            : ""
+        }
+
+
         <div class="product-price">
           ${formatPrice(product.price)}
         </div>
+
 
         ${
           location
@@ -387,6 +490,7 @@ function renderFeatured() {
             `
             : ""
         }
+
 
         <button
           class="buy-btn"
@@ -649,6 +753,7 @@ if (sellForm) {
               .value
               .trim(),
 
+
           price:
             Number(
               document
@@ -656,12 +761,15 @@ if (sellForm) {
                 .value
             ),
 
+
           category:
             document
               .getElementById("productCategory")
               .value,
 
+
           image: image,
+
 
           seller:
             document
@@ -669,11 +777,13 @@ if (sellForm) {
               .value
               .trim(),
 
+
           seller_phone:
             document
               .getElementById("sellerPhone")
               .value
               .trim(),
+
 
           seller_email:
             document
@@ -681,21 +791,25 @@ if (sellForm) {
               .value
               .trim(),
 
+
           location:
             document
               .getElementById("productLocation")
               ?.value
               .trim() || "",
 
+
           latitude:
             document
               .getElementById("productLatitude")
               ?.value || "",
 
+
           longitude:
             document
               .getElementById("productLongitude")
               ?.value || "",
+
 
           description:
             document
@@ -708,8 +822,6 @@ if (sellForm) {
 
         /*
           Phone and email are OPTIONAL.
-          At least one contact method is recommended,
-          but neither is required.
         */
 
         if (
@@ -899,6 +1011,7 @@ function updateCart() {
 
       </div>
 
+
       <button
         class="remove-btn"
         onclick="removeCartItem(${index})"
@@ -1044,23 +1157,28 @@ function renderBusinesses() {
         alt="${escapeHTML(business.name)}"
       >
 
+
       <div class="business-content">
 
         <h3>
           ${escapeHTML(business.name)}
         </h3>
 
+
         <span class="business-category">
           ${escapeHTML(business.category)}
         </span>
+
 
         <div class="business-location">
           📍 ${escapeHTML(location)}
         </div>
 
+
         <p>
           ${escapeHTML(business.description)}
         </p>
+
 
         ${
           location
@@ -1077,6 +1195,7 @@ function renderBusinesses() {
             : ""
         }
 
+
         ${
           business.phone
             ? `
@@ -1089,6 +1208,7 @@ function renderBusinesses() {
             `
             : ""
         }
+
 
         ${
           business.email
@@ -1194,16 +1314,19 @@ if (businessForm) {
 
         id: Date.now(),
 
+
         name:
           document
             .getElementById("businessName")
             .value
             .trim(),
 
+
         category:
           document
             .getElementById("businessCategory")
             .value,
+
 
         location:
           document
@@ -1211,11 +1334,13 @@ if (businessForm) {
             .value
             .trim(),
 
+
         phone:
           document
             .getElementById("businessPhone")
             .value
             .trim(),
+
 
         email:
           document
@@ -1223,7 +1348,9 @@ if (businessForm) {
             .value
             .trim(),
 
+
         image,
+
 
         description:
           document
