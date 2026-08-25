@@ -1,64 +1,497 @@
-/* BUSINESS ADVERTISING */
+/* =========================
+   RESET
+========================= */
 
-.business-section {
-  max-width: 700px;
-  margin: 30px auto;
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.business-section h2 {
-  color: #155eef;
-  margin-bottom: 8px;
+html {
+  scroll-behavior: smooth;
 }
 
-.business-section p {
-  color: #666;
-  margin-bottom: 20px;
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f7fb;
+  color: #172033;
+  line-height: 1.5;
 }
 
-#businessForm {
-  display: grid;
-  gap: 12px;
-}
 
-#businessForm input,
-#businessForm select,
-#businessForm textarea {
+/* =========================
+   HEADER
+========================= */
+
+.header {
   width: 100%;
-  padding: 13px;
-  border: 1px solid #ddd;
-  border-radius: 7px;
-  font-family: inherit;
+  min-height: 70px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 6%;
+  gap: 20px;
 }
 
-#businessForm textarea {
-  height: 110px;
-  resize: vertical;
+.logo {
+  font-size: 20px;
+  font-weight: 700;
+  color: #172033;
 }
 
-#businessForm button {
-  padding: 13px;
+.logo span {
+  color: #155eef;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-actions button {
+  border: 1px solid #dbe1ea;
+  background: #ffffff;
+  color: #172033;
+  padding: 9px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.header-actions button:hover {
+  background: #f0f4ff;
+  border-color: #155eef;
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  background: #ffffff;
+  padding: 10px 15px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.nav-link {
   border: none;
-  border-radius: 7px;
-  background: #155eef;
-  color: white;
-  font-weight: bold;
+  background: transparent;
+  padding: 10px 18px;
+  border-radius: 8px;
+  color: #596579;
+  font-weight: 600;
   cursor: pointer;
 }
 
-
-/* BUSINESS LIST */
-
-.business-list-section {
-  max-width: 1100px;
-  margin: 30px auto 60px;
-  padding: 0 20px;
+.nav-link:hover,
+.nav-link.active {
+  background: #eef4ff;
+  color: #155eef;
 }
 
-.businesses {
+
+/* =========================
+   PAGE SYSTEM
+========================= */
+
+.page {
+  display: none;
+}
+
+.active-page {
+  display: block;
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+  min-height: 440px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 20px;
+  background:
+    linear-gradient(
+      135deg,
+      #0f3d91,
+      #155eef,
+      #367cff
+    );
+  color: white;
+}
+
+.hero-content {
+  max-width: 720px;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 7px 12px;
+  border: 1px solid rgba(255,255,255,.4);
+  border-radius: 30px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin-bottom: 18px;
+}
+
+.hero h1 {
+  font-size: clamp(42px, 7vw, 72px);
+  line-height: 1;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 18px;
+  opacity: .92;
+  max-width: 600px;
+  margin: auto;
+}
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.primary-btn,
+.secondary-btn,
+.primary-small {
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  border-radius: 9px;
+  transition: .2s ease;
+}
+
+.primary-btn {
+  background: #155eef;
+  color: white;
+  padding: 13px 20px;
+}
+
+.primary-btn:hover {
+  background: #0d47c5;
+  transform: translateY(-1px);
+}
+
+.secondary-btn {
+  background: white;
+  color: #155eef;
+  padding: 13px 20px;
+}
+
+.secondary-btn:hover {
+  background: #eef4ff;
+}
+
+.primary-small {
+  background: #155eef;
+  color: white;
+  padding: 10px 15px;
+}
+
+.primary-small:hover {
+  background: #0d47c5;
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+.search-box {
+  max-width: 850px;
+  margin: -30px auto 45px;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  padding: 8px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.12);
+}
+
+.search-box input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  padding: 14px;
+  font-size: 15px;
+}
+
+.search-box button {
+  width: 48px;
+  border: none;
+  border-radius: 8px;
+  background: #155eef;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container {
+  width: min(1100px, 92%);
+  margin: 0 auto 55px;
+}
+
+.page-container {
+  padding-top: 45px;
+}
+
+
+/* =========================
+   CATEGORIES
+========================= */
+
+.container > h2 {
+  margin-bottom: 20px;
+}
+
+.categories {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+
+.categories button {
+  border: 1px solid #e0e5ed;
+  background: white;
+  border-radius: 12px;
+  padding: 20px 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  font-weight: 600;
+  color: #344054;
+}
+
+.categories button:first-letter {
+  font-size: 25px;
+}
+
+.categories button:hover {
+  border-color: #155eef;
+  color: #155eef;
+  transform: translateY(-2px);
+}
+
+
+/* =========================
+   SECTION HEADING
+========================= */
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.section-heading h1,
+.section-heading h2 {
+  color: #172033;
+}
+
+.section-heading > button:not(.primary-small) {
+  border: none;
+  background: transparent;
+  color: #155eef;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.small-title {
+  display: block;
+  color: #155eef;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  margin-bottom: 7px;
+}
+
+.section-heading select {
+  padding: 11px 15px;
+  border: 1px solid #d9dfe8;
+  border-radius: 8px;
+  background: white;
+}
+
+
+/* =========================
+   PRODUCT GRID
+========================= */
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.product-card {
+  background: white;
+  border: 1px solid #e5e9f0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: .2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0,0,0,.09);
+}
+
+.product-card img {
+  width: 100%;
+  height: 210px;
+  display: block;
+  object-fit: cover;
+  background: #eef1f5;
+}
+
+.product-info {
+  padding: 16px;
+}
+
+.product-info h3 {
+  font-size: 17px;
+  margin-bottom: 7px;
+}
+
+.product-category {
+  display: inline-block;
+  padding: 4px 8px;
+  background: #eef4ff;
+  color: #155eef;
+  border-radius: 5px;
+  font-size: 11px;
+  margin-bottom: 9px;
+}
+
+.product-price {
+  font-size: 19px;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.product-info p {
+  color: #667085;
+  font-size: 13px;
+  min-height: 40px;
+  margin-bottom: 14px;
+}
+
+.buy-btn {
+  width: 100%;
+  border: none;
+  padding: 11px;
+  background: #155eef;
+  color: white;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.buy-btn:hover {
+  background: #0d47c5;
+}
+
+
+/* =========================
+   EMPTY / ERROR
+========================= */
+
+.empty-message,
+.error-message {
+  background: white;
+  border: 1px solid #e5e9f0;
+  border-radius: 10px;
+  padding: 35px;
+  text-align: center;
+  grid-column: 1 / -1;
+}
+
+.error-message {
+  color: #b42318;
+}
+
+
+/* =========================
+   BUSINESS BANNER
+========================= */
+
+.business-banner {
+  width: min(1100px, 92%);
+  margin: 20px auto 70px;
+  padding: 35px;
+  border-radius: 15px;
+  background: #102a56;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+}
+
+.business-banner span {
+  color: #9dbbff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.business-banner h2 {
+  margin: 8px 0;
+}
+
+.business-banner p {
+  color: #d9e3f5;
+}
+
+.business-banner button {
+  flex-shrink: 0;
+  border: none;
+  background: white;
+  color: #155eef;
+  padding: 12px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+
+/* =========================
+   BUSINESS GRID
+========================= */
+
+.business-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
@@ -66,19 +499,21 @@
 
 .business-card {
   background: white;
-  border-radius: 10px;
+  border: 1px solid #e4e8ef;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+  box-shadow: 0 3px 12px rgba(0,0,0,.05);
 }
 
 .business-card img {
   width: 100%;
-  height: 180px;
+  height: 190px;
   object-fit: cover;
+  display: block;
 }
 
 .business-content {
-  padding: 15px;
+  padding: 17px;
 }
 
 .business-content h3 {
@@ -96,54 +531,415 @@
 }
 
 .business-location {
-  color: #555;
+  color: #667085;
   font-size: 13px;
-  margin-bottom: 8px;
+  margin-bottom: 9px;
 }
 
-.business-description {
-  color: #666;
+.business-content p {
+  color: #667085;
   font-size: 13px;
-  line-height: 1.5;
-  margin-bottom: 12px;
+  margin-bottom: 15px;
 }
 
-.contact-business {
+.contact-btn {
   display: block;
   text-align: center;
   padding: 10px;
   background: #155eef;
   color: white;
   text-decoration: none;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+
+/* =========================
+   SELL FORM
+========================= */
+
+.form-card {
+  width: min(650px, 100%);
+  margin: auto;
+  background: white;
+  padding: 35px;
+  border-radius: 15px;
+  border: 1px solid #e3e7ee;
+  box-shadow: 0 8px 30px rgba(0,0,0,.05);
+}
+
+.form-card h1 {
+  margin-bottom: 5px;
+}
+
+.form-card > p {
+  color: #667085;
+  margin-bottom: 25px;
+}
+
+#sellForm,
+#businessForm {
+  display: grid;
+  gap: 9px;
+}
+
+#sellForm label,
+#businessForm label {
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 7px;
+}
+
+#sellForm input,
+#sellForm select,
+#sellForm textarea,
+#businessForm input,
+#businessForm select,
+#businessForm textarea {
+  width: 100%;
+  border: 1px solid #d9dfe8;
+  border-radius: 8px;
+  padding: 13px;
+  outline: none;
+  font: inherit;
+  background: white;
+}
+
+#sellForm input:focus,
+#sellForm select:focus,
+#sellForm textarea:focus,
+#businessForm input:focus,
+#businessForm select:focus,
+#businessForm textarea:focus {
+  border-color: #155eef;
+  box-shadow: 0 0 0 3px rgba(21,94,239,.1);
+}
+
+#sellForm textarea,
+#businessForm textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+
+/* =========================
+   MODALS
+========================= */
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  padding: 25px 15px;
+  background: rgba(0,0,0,.55);
+  overflow-y: auto;
+}
+
+.modal-card {
+  width: min(500px, 100%);
+  margin: 30px auto;
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
+
+.close-btn {
+  position: absolute;
+  right: 15px;
+  top: 12px;
+  border: none;
+  background: #f1f3f6;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  background: #e5e7eb;
+}
+
+
+/* =========================
+   CART
+========================= */
+
+#cartItems {
+  margin: 20px 0;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid #e8ebf0;
+  padding: 12px 0;
+}
+
+.remove-btn {
+  border: none;
+  background: #fee4e2;
+  color: #b42318;
+  padding: 7px 10px;
   border-radius: 6px;
+  cursor: pointer;
+}
+
+.cart-total {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #e1e5eb;
+  padding: 18px 0;
+  margin-bottom: 10px;
+}
+
+
+/* =========================
+   AUTH
+========================= */
+
+.auth-title {
+  margin-bottom: 20px;
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 13px;
+  color: #667085;
+}
+
+.auth-switch button {
+  border: none;
+  background: transparent;
+  color: #155eef;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+  background: #101828;
+  color: #d0d5dd;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.footer-logo {
+  color: white;
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+footer p {
   font-size: 13px;
 }
 
+.copyright {
+  margin-top: 20px;
+  color: #98a2b3;
+}
 
-/* BUSINESS MOBILE */
 
-@media (max-width: 700px) {
+/* =========================
+   TABLET
+========================= */
 
-  .businesses {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+@media (max-width: 900px) {
+
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .categories {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .business-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
 }
 
-@media (max-width: 500px) {
 
-  .business-section {
-    margin: 20px 10px;
-    padding: 20px;
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+  body {
+    overflow-x: hidden;
   }
 
-  .business-list-section {
-    padding: 0 10px;
+  .header {
+    padding: 12px;
+    min-height: 62px;
+    flex-wrap: wrap;
   }
 
-  .businesses {
+  .logo {
+    font-size: 17px;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .header-actions button {
+    padding: 7px 9px;
+    font-size: 12px;
+  }
+
+  .nav {
+    overflow-x: auto;
+    justify-content: flex-start;
+    white-space: nowrap;
+  }
+
+  .nav-link {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .hero {
+    min-height: 390px;
+    padding: 45px 18px;
+  }
+
+  .hero h1 {
+    font-size: 43px;
+  }
+
+  .hero p {
+    font-size: 15px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+  }
+
+  .hero-buttons button {
+    width: 100%;
+  }
+
+  .search-box {
+    width: 92%;
+    margin-top: -25px;
+  }
+
+  .container {
+    width: 94%;
+    margin-bottom: 40px;
+  }
+
+  .categories {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .product-card img {
+    height: 150px;
+  }
+
+  .product-info {
+    padding: 11px;
+  }
+
+  .product-info h3 {
+    font-size: 14px;
+  }
+
+  .product-price {
+    font-size: 16px;
+  }
+
+  .product-info p {
+    font-size: 12px;
+  }
+
+  .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .section-heading select,
+  .primary-small {
+    width: 100%;
+  }
+
+  .business-banner {
+    width: 94%;
+    padding: 25px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .business-banner button {
+    width: 100%;
+  }
+
+  .business-grid {
     grid-template-columns: 1fr;
+  }
+
+  .form-card {
+    padding: 22px 17px;
+  }
+
+  .modal {
+    padding: 10px;
+  }
+
+  .modal-card {
+    padding: 23px 17px;
+    margin: 15px auto;
+  }
+
+}
+
+
+/* =========================
+   VERY SMALL PHONES
+========================= */
+
+@media (max-width: 380px) {
+
+  .header-actions {
+    gap: 4px;
+  }
+
+  .header-actions button {
+    padding: 6px 7px;
+    font-size: 11px;
+  }
+
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .categories {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .hero h1 {
+    font-size: 37px;
   }
 
 }
