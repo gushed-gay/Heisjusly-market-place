@@ -27,57 +27,37 @@ let cart = [];
    NAVIGATION
 ========================= */
 
-const navLinks =
-  document.querySelectorAll(".nav-link");
+const navLinks = document.querySelectorAll(".nav-link");
 
 navLinks.forEach(link => {
-
   link.addEventListener("click", () => {
-
     showSection(link.dataset.section);
-
   });
-
 });
-
 
 function showSection(sectionId) {
 
-  document
-    .querySelectorAll(".page")
-    .forEach(page => {
+  document.querySelectorAll(".page").forEach(page => {
+    page.classList.remove("active-page");
+  });
 
-      page.classList.remove("active-page");
-
-    });
-
-
-  const section =
-    document.getElementById(sectionId);
-
+  const section = document.getElementById(sectionId);
 
   if (section) {
-
     section.classList.add("active-page");
-
   }
 
-
   navLinks.forEach(link => {
-
     link.classList.toggle(
       "active",
       link.dataset.section === sectionId
     );
-
   });
-
 
   window.scrollTo({
     top: 0,
     behavior: "smooth"
   });
-
 }
 
 
@@ -86,10 +66,7 @@ function showSection(sectionId) {
 ========================= */
 
 function formatPrice(price) {
-
-  return "₦" +
-    Number(price).toLocaleString();
-
+  return "₦" + Number(price || 0).toLocaleString();
 }
 
 
@@ -101,53 +78,31 @@ async function loadProducts() {
 
   try {
 
-    const response =
-      await fetch(`${API_URL}/products`);
-
+    const response = await fetch(`${API_URL}/products`);
 
     if (!response.ok) {
-
-      throw new Error(
-        "Could not load products"
-      );
-
+      throw new Error("Could not load products");
     }
 
-
-    products =
-      await response.json();
-
+    products = await response.json();
 
     renderProducts();
-
     renderFeatured();
-
 
   } catch (error) {
 
-    console.error(
-      "Load products error:",
-      error
-    );
+    console.error("Load products error:", error);
 
+    const container =
+      document.getElementById("productsContainer");
 
-    const productsContainer =
-      document.getElementById(
-        "productsContainer"
-      );
+    if (container) {
 
-
-    if (productsContainer) {
-
-      productsContainer.innerHTML = `
-
-        <p class="error-message">
-
-          Could not connect to
-          Heisjuly Marketplace server.
-
-        </p>
-
+      container.innerHTML = `
+        <div class="empty-message">
+          <h3>Could not load products</h3>
+          <p>Please check your internet connection.</p>
+        </div>
       `;
 
     }
@@ -164,33 +119,20 @@ async function loadProducts() {
 function renderProducts() {
 
   const container =
-    document.getElementById(
-      "productsContainer"
-    );
-
+    document.getElementById("productsContainer");
 
   if (!container) return;
 
-
   const searchInput =
-    document.getElementById(
-      "searchInput"
-    );
-
+    document.getElementById("searchInput");
 
   const search =
     searchInput
-      ? searchInput.value
-          .toLowerCase()
-          .trim()
+      ? searchInput.value.toLowerCase().trim()
       : "";
 
-
   const categoryFilter =
-    document.getElementById(
-      "categoryFilter"
-    );
-
+    document.getElementById("categoryFilter");
 
   const category =
     categoryFilter
@@ -201,32 +143,41 @@ function renderProducts() {
   const filteredProducts =
     products.filter(product => {
 
-      const productName =
+      const name =
+        String(product.name || "").toLowerCase();
+
+      const description =
+        String(product.description || "").toLowerCase();
+
+      const seller =
+        String(product.seller || "").toLowerCase();
+
+      const location =
         String(
-          product.name || ""
+          product.location ||
+          product.area ||
+          product.city ||
+          ""
         ).toLowerCase();
 
-
-      const productDescription =
-        String(
-          product.description || ""
-        ).toLowerCase();
+      const productCategory =
+        String(product.category || "").toLowerCase();
 
 
       const matchesSearch =
-        productName.includes(search) ||
-        productDescription.includes(search);
+        !search ||
+        name.includes(search) ||
+        description.includes(search) ||
+        seller.includes(search) ||
+        location.includes(search);
 
 
       const matchesCategory =
         category === "all" ||
-        product.category === category;
+        productCategory === category;
 
 
-      return (
-        matchesSearch &&
-        matchesCategory
-      );
+      return matchesSearch && matchesCategory;
 
     });
 
@@ -237,17 +188,15 @@ function renderProducts() {
   if (filteredProducts.length === 0) {
 
     container.innerHTML = `
-
       <div class="empty-message">
 
         <h3>No products found</h3>
 
         <p>
-          Try another search or category.
+          Try another product, city, area or category.
         </p>
 
       </div>
-
     `;
 
     return;
@@ -260,9 +209,20 @@ function renderProducts() {
     const card =
       document.createElement("div");
 
+    card.className = "product-card";
 
-    card.className =
-      "product-card";
+
+    const location =
+      product.location ||
+      product.area ||
+      product.city ||
+      "";
+
+
+    const mapLink =
+      location
+        ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`
+        : "";
 
 
     card.innerHTML = `
@@ -275,74 +235,86 @@ function renderProducts() {
         alt="${escapeHTML(product.name)}"
       >
 
-
       <div class="product-info">
 
         <h3>
           ${escapeHTML(product.name)}
         </h3>
 
-
         <span class="product-category">
-          ${escapeHTML(product.category)}
+          ${escapeHTML(product.category || "")}
         </span>
-
 
         <div class="product-price">
           ${formatPrice(product.price)}
         </div>
 
-
         <p>
-          ${escapeHTML(product.description)}
+          ${escapeHTML(product.description || "")}
         </p>
-
 
         <p>
           <strong>Seller:</strong>
-          ${escapeHTML(product.seller || "")}
+          ${escapeHTML(product.seller || "Seller")}
         </p>
 
-
         ${
-          product.seller_phone
+          location
             ? `
+              <p class="product-location">
+                📍 ${escapeHTML(location)}
+              </p>
+
               <a
-                href="tel:${escapeHTML(product.seller_phone)}"
+                href="${mapLink}"
+                target="_blank"
+                rel="noopener"
                 class="contact-btn"
               >
-                📞 Call Seller
+                🗺️ View Location
               </a>
             `
             : ""
         }
 
+        <div class="seller-contact">
 
-        ${
-          product.seller_email
-            ? `
-              <a
-                href="mailto:${escapeHTML(product.seller_email)}"
-                class="contact-btn"
-              >
-                ✉️ Email Seller
-              </a>
-            `
-            : ""
-        }
+          ${
+            product.seller_phone
+              ? `
+                <a
+                  href="tel:${escapeHTML(product.seller_phone)}"
+                  class="contact-btn"
+                >
+                  📞 Call Seller
+                </a>
+              `
+              : ""
+          }
 
+          ${
+            product.seller_email
+              ? `
+                <a
+                  href="mailto:${escapeHTML(product.seller_email)}"
+                  class="contact-btn"
+                >
+                  ✉️ Email Seller
+                </a>
+              `
+              : ""
+          }
+
+        </div>
 
         <button
           class="buy-btn"
-          onclick="addToCart('${
-            product.id
-          }')"
+          onclick="addToCart('${product.id}')"
         >
           Add to Cart
         </button>
 
       </div>
-
     `;
 
 
@@ -360,72 +332,76 @@ function renderProducts() {
 function renderFeatured() {
 
   const container =
-    document.getElementById(
-      "featuredProducts"
-    );
-
+    document.getElementById("featuredProducts");
 
   if (!container) return;
-
 
   container.innerHTML = "";
 
 
-  products
-    .slice(0, 4)
-    .forEach(product => {
+  products.slice(0, 4).forEach(product => {
 
-      const card =
-        document.createElement("div");
+    const card =
+      document.createElement("div");
 
-
-      card.className =
-        "product-card";
+    card.className = "product-card";
 
 
-      card.innerHTML = `
-
-        <img
-          src="${
-            product.image ||
-            "https://via.placeholder.com/500"
-          }"
-          alt="${escapeHTML(product.name)}"
-        >
+    const location =
+      product.location ||
+      product.area ||
+      product.city ||
+      "";
 
 
-        <div class="product-info">
+    card.innerHTML = `
 
-          <h3>
-            ${escapeHTML(product.name)}
-          </h3>
+      <img
+        src="${
+          product.image ||
+          "https://via.placeholder.com/500"
+        }"
+        alt="${escapeHTML(product.name)}"
+      >
 
+      <div class="product-info">
 
-          <span class="product-category">
-            ${escapeHTML(product.category)}
-          </span>
+        <h3>
+          ${escapeHTML(product.name)}
+        </h3>
 
+        <span class="product-category">
+          ${escapeHTML(product.category || "")}
+        </span>
 
-          <div class="product-price">
-            ${formatPrice(product.price)}
-          </div>
-
-
-          <button
-            class="buy-btn"
-            onclick="addToCart('${product.id}')"
-          >
-            Add to Cart
-          </button>
-
+        <div class="product-price">
+          ${formatPrice(product.price)}
         </div>
 
-      `;
+        ${
+          location
+            ? `
+              <p>
+                📍 ${escapeHTML(location)}
+              </p>
+            `
+            : ""
+        }
+
+        <button
+          class="buy-btn"
+          onclick="addToCart('${product.id}')"
+        >
+          Add to Cart
+        </button>
+
+      </div>
+    `;
 
 
-      container.appendChild(card);
+    container.appendChild(card);
 
-    });
+  });
 
 }
 
@@ -435,10 +411,7 @@ function renderFeatured() {
 ========================= */
 
 const searchInput =
-  document.getElementById(
-    "searchInput"
-  );
-
+  document.getElementById("searchInput");
 
 if (searchInput) {
 
@@ -451,14 +424,34 @@ if (searchInput) {
 
 
 /* =========================
+   SEARCH BUTTON
+========================= */
+
+const searchBtn =
+  document.getElementById("searchBtn");
+
+if (searchBtn) {
+
+  searchBtn.addEventListener(
+    "click",
+    () => {
+
+      showSection("products");
+
+      renderProducts();
+
+    }
+  );
+
+}
+
+
+/* =========================
    CATEGORY FILTER
 ========================= */
 
 const categoryFilter =
-  document.getElementById(
-    "categoryFilter"
-  );
-
+  document.getElementById("categoryFilter");
 
 if (categoryFilter) {
 
@@ -478,14 +471,9 @@ function filterCategory(category) {
 
   showSection("products");
 
-
   if (categoryFilter) {
-
-    categoryFilter.value =
-      category;
-
+    categoryFilter.value = category;
   }
-
 
   renderProducts();
 
@@ -498,36 +486,93 @@ function filterCategory(category) {
 
 function imageToDataURL(file) {
 
-  return new Promise(
-    (resolve, reject) => {
+  return new Promise((resolve, reject) => {
 
-      const reader =
-        new FileReader();
+    const reader = new FileReader();
 
+    reader.onload = () => {
+      resolve(reader.result);
+    };
 
-      reader.onload = () => {
+    reader.onerror = () => {
+      reject(new Error("Could not read image"));
+    };
 
-        resolve(
-          reader.result
-        );
+    reader.readAsDataURL(file);
 
-      };
+  });
 
-
-      reader.onerror = () => {
-
-        reject(
-          new Error(
-            "Could not read image"
-          )
-        );
-
-      };
+}
 
 
-      reader.readAsDataURL(file);
+/* =========================
+   GET CURRENT LOCATION
+========================= */
+
+function getCurrentLocation() {
+
+  if (!navigator.geolocation) {
+
+    alert(
+      "Location is not supported by this browser."
+    );
+
+    return;
+
+  }
+
+
+  navigator.geolocation.getCurrentPosition(
+
+    position => {
+
+      const latitude =
+        position.coords.latitude;
+
+      const longitude =
+        position.coords.longitude;
+
+
+      const locationInput =
+        document.getElementById("productLocation");
+
+      const latitudeInput =
+        document.getElementById("productLatitude");
+
+      const longitudeInput =
+        document.getElementById("productLongitude");
+
+
+      if (latitudeInput) {
+        latitudeInput.value = latitude;
+      }
+
+      if (longitudeInput) {
+        longitudeInput.value = longitude;
+      }
+
+
+      if (locationInput) {
+
+        locationInput.value =
+          `${latitude}, ${longitude}`;
+
+      }
+
+      alert("Your location has been added.");
+
+    },
+
+    error => {
+
+      console.error(error);
+
+      alert(
+        "Unable to get your location. Please allow location permission."
+      );
 
     }
+
   );
 
 }
@@ -538,9 +583,7 @@ function imageToDataURL(file) {
 ========================= */
 
 const sellForm =
-  document.getElementById(
-    "sellForm"
-  );
+  document.getElementById("sellForm");
 
 
 if (sellForm) {
@@ -553,9 +596,7 @@ if (sellForm) {
 
 
       const imageInput =
-        document.getElementById(
-          "productImage"
-        );
+        document.getElementById("productImage");
 
 
       const imageFile =
@@ -567,34 +608,23 @@ if (sellForm) {
 
       if (!imageFile) {
 
-        alert(
-          "Please select a product image."
-        );
+        alert("Please select a product image.");
 
         return;
 
       }
 
 
-      if (
-        !imageFile.type.startsWith(
-          "image/"
-        )
-      ) {
+      if (!imageFile.type.startsWith("image/")) {
 
-        alert(
-          "Please select a valid image."
-        );
+        alert("Please select a valid image.");
 
         return;
 
       }
 
 
-      if (
-        imageFile.size >
-        2 * 1024 * 1024
-      ) {
+      if (imageFile.size > 2 * 1024 * 1024) {
 
         alert(
           "Please choose an image smaller than 2MB."
@@ -608,93 +638,90 @@ if (sellForm) {
       try {
 
         const image =
-          await imageToDataURL(
-            imageFile
-          );
+          await imageToDataURL(imageFile);
 
 
         const product = {
 
           name:
             document
-              .getElementById(
-                "productName"
-              )
+              .getElementById("productName")
               .value
               .trim(),
-
 
           price:
             Number(
               document
-                .getElementById(
-                  "productPrice"
-                )
+                .getElementById("productPrice")
                 .value
             ),
 
-
           category:
             document
-              .getElementById(
-                "productCategory"
-              )
+              .getElementById("productCategory")
               .value,
-
 
           image: image,
 
-
-          description:
-            document
-              .getElementById(
-                "productDescription"
-              )
-              .value
-              .trim(),
-
-
           seller:
             document
-              .getElementById(
-                "sellerName"
-              )
+              .getElementById("sellerName")
               .value
               .trim(),
-
 
           seller_phone:
             document
-              .getElementById(
-                "sellerPhone"
-              )
+              .getElementById("sellerPhone")
               .value
               .trim(),
 
-
           seller_email:
             document
-              .getElementById(
-                "sellerEmail"
-              )
+              .getElementById("sellerEmail")
+              .value
+              .trim(),
+
+          location:
+            document
+              .getElementById("productLocation")
+              ?.value
+              .trim() || "",
+
+          latitude:
+            document
+              .getElementById("productLatitude")
+              ?.value || "",
+
+          longitude:
+            document
+              .getElementById("productLongitude")
+              ?.value || "",
+
+          description:
+            document
+              .getElementById("productDescription")
               .value
               .trim()
 
         };
 
 
+        /*
+          Phone and email are OPTIONAL.
+          At least one contact method is recommended,
+          but neither is required.
+        */
+
         if (
           !product.name ||
           !product.price ||
           !product.category ||
-          !product.description ||
           !product.seller ||
-          !product.seller_phone ||
-          !product.seller_email
+          !product.description
         ) {
 
           alert(
-            "Please fill in all required fields."
+            "Please fill in the product name, price, category, seller name and description."
           );
 
           return;
@@ -715,9 +742,7 @@ if (sellForm) {
               },
 
               body:
-                JSON.stringify(
-                  product
-                )
+                JSON.stringify(product)
 
             }
           );
@@ -733,7 +758,7 @@ if (sellForm) {
 
           alert(
             data.message ||
-            "Could not post product."
+            "Could not publish product."
           );
 
           return;
@@ -742,7 +767,7 @@ if (sellForm) {
 
 
         alert(
-          "Product posted successfully!"
+          "Product published successfully!"
         );
 
 
@@ -752,10 +777,7 @@ if (sellForm) {
         await loadProducts();
 
 
-        showSection(
-          "products"
-        );
-
+        showSection("products");
 
       } catch (error) {
 
@@ -763,7 +785,6 @@ if (sellForm) {
           "Post product error:",
           error
         );
-
 
         alert(
           "Could not connect to the server."
@@ -793,9 +814,7 @@ function addToCart(productId) {
 
   if (!product) {
 
-    alert(
-      "Product not found."
-    );
+    alert("Product not found.");
 
     return;
 
@@ -803,7 +822,6 @@ function addToCart(productId) {
 
 
   cart.push(product);
-
 
   updateCart();
 
@@ -822,43 +840,27 @@ function addToCart(productId) {
 function updateCart() {
 
   const cartCount =
-    document.getElementById(
-      "cartCount"
-    );
+    document.getElementById("cartCount");
 
 
   if (cartCount) {
-
-    cartCount.textContent =
-      cart.length;
-
+    cartCount.textContent = cart.length;
   }
 
 
   const cartItems =
-    document.getElementById(
-      "cartItems"
-    );
-
+    document.getElementById("cartItems");
 
   const cartTotal =
-    document.getElementById(
-      "cartTotal"
-    );
+    document.getElementById("cartTotal");
 
 
-  if (
-    !cartItems ||
-    !cartTotal
-  ) {
-
+  if (!cartItems || !cartTotal) {
     return;
-
   }
 
 
   cartItems.innerHTML = "";
-
 
   let total = 0;
 
@@ -866,63 +868,50 @@ function updateCart() {
   if (cart.length === 0) {
 
     cartItems.innerHTML = `
-
-      <p>
-        Your cart is empty.
-      </p>
-
+      <p>Your cart is empty.</p>
     `;
 
   }
 
 
-  cart.forEach(
-    (item, index) => {
+  cart.forEach((item, index) => {
 
-      total += Number(
-        item.price
-      );
+    total += Number(item.price || 0);
 
 
-      const div =
-        document.createElement(
-          "div"
-        );
+    const div =
+      document.createElement("div");
+
+    div.className = "cart-item";
 
 
-      div.className =
-        "cart-item";
+    div.innerHTML = `
+
+      <div>
+
+        <strong>
+          ${escapeHTML(item.name)}
+        </strong>
+
+        <br>
+
+        ${formatPrice(item.price)}
+
+      </div>
+
+      <button
+        class="remove-btn"
+        onclick="removeCartItem(${index})"
+      >
+        Remove
+      </button>
+
+    `;
 
 
-      div.innerHTML = `
+    cartItems.appendChild(div);
 
-        <div>
-
-          <strong>
-            ${escapeHTML(item.name)}
-          </strong>
-
-          <br>
-
-          ${formatPrice(item.price)}
-
-        </div>
-
-
-        <button
-          class="remove-btn"
-          onclick="removeCartItem(${index})"
-        >
-          Remove
-        </button>
-
-      `;
-
-
-      cartItems.appendChild(div);
-
-    }
-  );
+  });
 
 
   cartTotal.textContent =
@@ -949,9 +938,7 @@ function removeCartItem(index) {
 ========================= */
 
 const cartBtn =
-  document.getElementById(
-    "cartBtn"
-  );
+  document.getElementById("cartBtn");
 
 
 if (cartBtn) {
@@ -961,16 +948,11 @@ if (cartBtn) {
     () => {
 
       const cartModal =
-        document.getElementById(
-          "cartModal"
-        );
+        document.getElementById("cartModal");
 
 
       if (cartModal) {
-
-        cartModal.style.display =
-          "block";
-
+        cartModal.style.display = "block";
       }
 
     }
@@ -986,16 +968,11 @@ if (cartBtn) {
 function closeCart() {
 
   const cartModal =
-    document.getElementById(
-      "cartModal"
-    );
+    document.getElementById("cartModal");
 
 
   if (cartModal) {
-
-    cartModal.style.display =
-      "none";
-
+    cartModal.style.display = "none";
   }
 
 }
@@ -1009,9 +986,7 @@ function checkout() {
 
   if (cart.length === 0) {
 
-    alert(
-      "Your cart is empty."
-    );
+    alert("Your cart is empty.");
 
     return;
 
@@ -1032,9 +1007,7 @@ function checkout() {
 function renderBusinesses() {
 
   const container =
-    document.getElementById(
-      "businessContainer"
-    );
+    document.getElementById("businessContainer");
 
 
   if (!container) return;
@@ -1043,103 +1016,100 @@ function renderBusinesses() {
   container.innerHTML = "";
 
 
-  businesses.forEach(
-    business => {
+  businesses.forEach(business => {
 
-      const card =
-        document.createElement(
-          "div"
-        );
+    const card =
+      document.createElement("div");
 
-
-      card.className =
-        "business-card";
+    card.className = "business-card";
 
 
-      card.innerHTML = `
-
-        <img
-          src="${
-            business.image ||
-            "https://via.placeholder.com/500"
-          }"
-          alt="${escapeHTML(
-            business.name
-          )}"
-        >
+    const location =
+      business.location || "";
 
 
-        <div class="business-content">
-
-          <h3>
-            ${escapeHTML(
-              business.name
-            )}
-          </h3>
+    const mapLink =
+      location
+        ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`
+        : "";
 
 
-          <span class="business-category">
-            ${escapeHTML(
-              business.category
-            )}
-          </span>
+    card.innerHTML = `
 
+      <img
+        src="${
+          business.image ||
+          "https://via.placeholder.com/500"
+        }"
+        alt="${escapeHTML(business.name)}"
+      >
 
-          <div class="business-location">
-            📍
-            ${escapeHTML(
-              business.location
-            )}
-          </div>
+      <div class="business-content">
 
+        <h3>
+          ${escapeHTML(business.name)}
+        </h3>
 
-          <p>
-            ${escapeHTML(
-              business.description
-            )}
-          </p>
+        <span class="business-category">
+          ${escapeHTML(business.category)}
+        </span>
 
-
-          ${
-            business.phone
-              ? `
-                <a
-                  href="tel:${escapeHTML(
-                    business.phone
-                  )}"
-                  class="contact-btn"
-                >
-                  📞 Call Business
-                </a>
-              `
-              : ""
-          }
-
-
-          ${
-            business.email
-              ? `
-                <a
-                  href="mailto:${escapeHTML(
-                    business.email
-                  )}"
-                  class="contact-btn"
-                >
-                  ✉️ Email Business
-                </a>
-              `
-              : ""
-          }
-
+        <div class="business-location">
+          📍 ${escapeHTML(location)}
         </div>
 
-      `;
+        <p>
+          ${escapeHTML(business.description)}
+        </p>
+
+        ${
+          location
+            ? `
+              <a
+                href="${mapLink}"
+                target="_blank"
+                rel="noopener"
+                class="contact-btn"
+              >
+                🗺️ View Location
+              </a>
+            `
+            : ""
+        }
+
+        ${
+          business.phone
+            ? `
+              <a
+                href="tel:${escapeHTML(business.phone)}"
+                class="contact-btn"
+              >
+                📞 Call Business
+              </a>
+            `
+            : ""
+        }
+
+        ${
+          business.email
+            ? `
+              <a
+                href="mailto:${escapeHTML(business.email)}"
+                class="contact-btn"
+              >
+                ✉️ Email Business
+              </a>
+            `
+            : ""
+        }
+
+      </div>
+    `;
 
 
-      container.appendChild(card);
+    container.appendChild(card);
 
-    }
-  );
+  });
 
 }
 
@@ -1151,16 +1121,11 @@ function renderBusinesses() {
 function openBusinessForm() {
 
   const modal =
-    document.getElementById(
-      "businessModal"
-    );
+    document.getElementById("businessModal");
 
 
   if (modal) {
-
-    modal.style.display =
-      "block";
-
+    modal.style.display = "block";
   }
 
 }
@@ -1169,16 +1134,11 @@ function openBusinessForm() {
 function closeBusinessForm() {
 
   const modal =
-    document.getElementById(
-      "businessModal"
-    );
+    document.getElementById("businessModal");
 
 
   if (modal) {
-
-    modal.style.display =
-      "none";
-
+    modal.style.display = "none";
   }
 
 }
@@ -1189,94 +1149,112 @@ function closeBusinessForm() {
 ========================= */
 
 const businessForm =
-  document.getElementById(
-    "businessForm"
-  );
+  document.getElementById("businessForm");
 
 
 if (businessForm) {
 
   businessForm.addEventListener(
     "submit",
-    event => {
+    async event => {
 
       event.preventDefault();
+
+
+      const imageInput =
+        document.getElementById("businessImage");
+
+
+      let image = "";
+
+
+      if (
+        imageInput &&
+        imageInput.files &&
+        imageInput.files[0]
+      ) {
+
+        try {
+
+          image =
+            await imageToDataURL(
+              imageInput.files[0]
+            );
+
+        } catch (error) {
+
+          console.error(error);
+
+        }
+
+      }
 
 
       const business = {
 
         id: Date.now(),
 
-
         name:
           document
-            .getElementById(
-              "businessName"
-            )
+            .getElementById("businessName")
             .value
             .trim(),
-
 
         category:
           document
-            .getElementById(
-              "businessCategory"
-            )
+            .getElementById("businessCategory")
             .value,
-
 
         location:
           document
-            .getElementById(
-              "businessLocation"
-            )
+            .getElementById("businessLocation")
             .value
             .trim(),
-
 
         phone:
           document
-            .getElementById(
-              "businessPhone"
-            )
+            .getElementById("businessPhone")
             .value
             .trim(),
-
 
         email:
           document
-            .getElementById(
-              "businessEmail"
-            )
+            .getElementById("businessEmail")
             .value
             .trim(),
 
-
-        image:
-          "",
-
+        image,
 
         description:
           document
-            .getElementById(
-              "businessDescription"
-            )
+            .getElementById("businessDescription")
             .value
             .trim()
 
       };
 
 
-      businesses.unshift(
-        business
-      );
+      if (
+        !business.name ||
+        !business.category ||
+        !business.location ||
+        !business.description
+      ) {
 
+        alert(
+          "Please fill in the required business information."
+        );
+
+        return;
+
+      }
+
+
+      businesses.unshift(business);
 
       renderBusinesses();
 
-
       businessForm.reset();
-
 
       closeBusinessForm();
 
@@ -1297,32 +1275,17 @@ if (businessForm) {
 
 function escapeHTML(value) {
 
-  return String(value)
+  return String(value || "")
 
-    .replace(
-      /&/g,
-      "&amp;"
-    )
+    .replace(/&/g, "&amp;")
 
-    .replace(
-      /</g,
-      "&lt;"
-    )
+    .replace(/</g, "&lt;")
 
-    .replace(
-      />/g,
-      "&gt;"
-    )
+    .replace(/>/g, "&gt;")
 
-    .replace(
-      /"/g,
-      "&quot;"
-    )
+    .replace(/"/g, "&quot;")
 
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+    .replace(/'/g, "&#039;");
 
 }
 
@@ -1336,34 +1299,19 @@ window.addEventListener(
   event => {
 
     const cartModal =
-      document.getElementById(
-        "cartModal"
-      );
-
+      document.getElementById("cartModal");
 
     const businessModal =
-      document.getElementById(
-        "businessModal"
-      );
+      document.getElementById("businessModal");
 
 
-    if (
-      event.target ===
-      cartModal
-    ) {
-
+    if (event.target === cartModal) {
       closeCart();
-
     }
 
 
-    if (
-      event.target ===
-      businessModal
-    ) {
-
+    if (event.target === businessModal) {
       closeBusinessForm();
-
     }
 
   }
