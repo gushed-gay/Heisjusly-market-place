@@ -6,7 +6,7 @@
 
   <title>Heisjuly Marketplace</title>
 
-  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="./index.css">
 </head>
 
 <body>
@@ -22,6 +22,7 @@
     <div class="header-actions">
       <button id="loginBtn">Login</button>
       <button id="signupBtn">Sign Up</button>
+
       <button id="cartBtn">
         🛒 <span id="cartCount">0</span>
       </button>
@@ -63,9 +64,7 @@
           HEISJULY MARKETPLACE
         </span>
 
-        <h1>
-          Buy. Sell. Grow.
-        </h1>
+        <h1>Buy. Sell. Grow.</h1>
 
         <p>
           Discover products, find businesses and
@@ -101,12 +100,10 @@
       <input
         type="search"
         id="searchInput"
-        placeholder="Search products or businesses..."
+        placeholder="Search products..."
       >
 
-      <button id="searchBtn">
-        🔍
-      </button>
+      <button id="searchBtn">🔍</button>
 
     </div>
 
@@ -153,7 +150,7 @@
     </div>
 
 
-    <!-- FEATURED -->
+    <!-- FEATURED PRODUCTS -->
     <div class="container">
 
       <div class="section-heading">
@@ -174,14 +171,12 @@
     </div>
 
 
-    <!-- BUSINESS PROMOTION -->
+    <!-- BUSINESS BANNER -->
     <div class="business-banner">
 
       <div>
 
-        <span>
-          HAVE A BUSINESS?
-        </span>
+        <span>HAVE A BUSINESS?</span>
 
         <h2>
           Put your business in front of customers.
@@ -194,9 +189,7 @@
 
       </div>
 
-      <button
-        onclick="showSection('business')"
-      >
+      <button onclick="showSection('business')">
         Promote Business
       </button>
 
@@ -242,6 +235,14 @@
 
           <option value="home">
             Home
+          </option>
+
+          <option value="food">
+            Food
+          </option>
+
+          <option value="services">
+            Services
           </option>
 
         </select>
@@ -355,6 +356,14 @@
               Home
             </option>
 
+            <option value="food">
+              Food
+            </option>
+
+            <option value="services">
+              Services
+            </option>
+
           </select>
 
           <label>Product Image URL</label>
@@ -374,7 +383,10 @@
             required
           ></textarea>
 
-          <button class="primary-btn" type="submit">
+          <button
+            class="primary-btn"
+            type="submit"
+          >
             Publish Product
           </button>
 
@@ -387,7 +399,7 @@
   </section>
 
 
-  <!-- BUSINESS FORM -->
+  <!-- BUSINESS MODAL -->
   <div
     class="modal"
     id="businessModal"
@@ -430,29 +442,12 @@
             Choose category
           </option>
 
-          <option value="Food">
-            Food
-          </option>
-
-          <option value="Fashion">
-            Fashion
-          </option>
-
-          <option value="Technology">
-            Technology
-          </option>
-
-          <option value="Beauty">
-            Beauty
-          </option>
-
-          <option value="Services">
-            Services
-          </option>
-
-          <option value="Education">
-            Education
-          </option>
+          <option value="Food">Food</option>
+          <option value="Fashion">Fashion</option>
+          <option value="Technology">Technology</option>
+          <option value="Beauty">Beauty</option>
+          <option value="Services">Services</option>
+          <option value="Education">Education</option>
 
         </select>
 
@@ -491,7 +486,10 @@
           required
         ></textarea>
 
-        <button class="primary-btn" type="submit">
+        <button
+          class="primary-btn"
+          type="submit"
+        >
           Publish Business
         </button>
 
@@ -583,7 +581,8 @@
   </footer>
 
 
-  <script src="index.js"></script>
+  <!-- JAVASCRIPT -->
+  <script src="./index.js"></script>
 
 </body>
 </html>
