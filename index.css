@@ -1,0 +1,149 @@
+/* BUSINESS ADVERTISING */
+
+.business-section {
+  max-width: 700px;
+  margin: 30px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+}
+
+.business-section h2 {
+  color: #155eef;
+  margin-bottom: 8px;
+}
+
+.business-section p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+#businessForm {
+  display: grid;
+  gap: 12px;
+}
+
+#businessForm input,
+#businessForm select,
+#businessForm textarea {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #ddd;
+  border-radius: 7px;
+  font-family: inherit;
+}
+
+#businessForm textarea {
+  height: 110px;
+  resize: vertical;
+}
+
+#businessForm button {
+  padding: 13px;
+  border: none;
+  border-radius: 7px;
+  background: #155eef;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+
+/* BUSINESS LIST */
+
+.business-list-section {
+  max-width: 1100px;
+  margin: 30px auto 60px;
+  padding: 0 20px;
+}
+
+.businesses {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.business-card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+}
+
+.business-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.business-content {
+  padding: 15px;
+}
+
+.business-content h3 {
+  margin-bottom: 7px;
+}
+
+.business-category {
+  display: inline-block;
+  background: #eef4ff;
+  color: #155eef;
+  padding: 5px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  margin-bottom: 10px;
+}
+
+.business-location {
+  color: #555;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.business-description {
+  color: #666;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.contact-business {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  background: #155eef;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+
+/* BUSINESS MOBILE */
+
+@media (max-width: 700px) {
+
+  .businesses {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+}
+
+@media (max-width: 500px) {
+
+  .business-section {
+    margin: 20px 10px;
+    padding: 20px;
+  }
+
+  .business-list-section {
+    padding: 0 10px;
+  }
+
+  .businesses {
+    grid-template-columns: 1fr;
+  }
+
+}
