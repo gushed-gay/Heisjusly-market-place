@@ -102,7 +102,9 @@
         placeholder="Search products..."
       >
 
-      <button id="searchBtn">🔍</button>
+      <button id="searchBtn">
+        🔍
+      </button>
 
     </div>
 
@@ -322,6 +324,7 @@
             required
           >
 
+
           <label>Price (₦)</label>
 
           <input
@@ -331,9 +334,13 @@
             required
           >
 
+
           <label>Category</label>
 
-          <select id="productCategory" required>
+          <select
+            id="productCategory"
+            required
+          >
 
             <option value="">
               Choose category
@@ -365,14 +372,46 @@
 
           </select>
 
-          <label>Product Image URL</label>
+
+          <label>Product Image</label>
 
           <input
             id="productImage"
-            type="url"
-            placeholder="https://example.com/image.jpg"
+            type="file"
+            accept="image/*"
             required
           >
+
+
+          <label>Seller Name</label>
+
+          <input
+            id="sellerName"
+            type="text"
+            placeholder="Your name"
+            required
+          >
+
+
+          <label>Phone Number</label>
+
+          <input
+            id="sellerPhone"
+            type="tel"
+            placeholder="+234 800 000 0000"
+            required
+          >
+
+
+          <label>Email Address</label>
+
+          <input
+            id="sellerEmail"
+            type="email"
+            placeholder="you@example.com"
+            required
+          >
+
 
           <label>Description</label>
 
@@ -381,6 +420,7 @@
             placeholder="Describe your product..."
             required
           ></textarea>
+
 
           <button
             class="primary-btn"
@@ -430,6 +470,7 @@
           required
         >
 
+
         <label>Category</label>
 
         <select
@@ -441,14 +482,32 @@
             Choose category
           </option>
 
-          <option value="Food">Food</option>
-          <option value="Fashion">Fashion</option>
-          <option value="Technology">Technology</option>
-          <option value="Beauty">Beauty</option>
-          <option value="Services">Services</option>
-          <option value="Education">Education</option>
+          <option value="Food">
+            Food
+          </option>
+
+          <option value="Fashion">
+            Fashion
+          </option>
+
+          <option value="Technology">
+            Technology
+          </option>
+
+          <option value="Beauty">
+            Beauty
+          </option>
+
+          <option value="Services">
+            Services
+          </option>
+
+          <option value="Education">
+            Education
+          </option>
 
         </select>
+
 
         <label>Location</label>
 
@@ -459,6 +518,7 @@
           required
         >
 
+
         <label>Phone Number</label>
 
         <input
@@ -468,14 +528,26 @@
           required
         >
 
-        <label>Business Image URL</label>
+
+        <label>Email Address</label>
+
+        <input
+          id="businessEmail"
+          type="email"
+          placeholder="business@example.com"
+          required
+        >
+
+
+        <label>Business Image</label>
 
         <input
           id="businessImage"
-          type="url"
-          placeholder="https://example.com/image.jpg"
+          type="file"
+          accept="image/*"
           required
         >
+
 
         <label>Description</label>
 
@@ -484,6 +556,7 @@
           placeholder="Describe your business..."
           required
         ></textarea>
+
 
         <button
           class="primary-btn"
